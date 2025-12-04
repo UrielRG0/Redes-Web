@@ -25,7 +25,11 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+                "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
+             "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           },
           "configurations": {
@@ -88,5 +92,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "79214d68-a804-4a56-9adb-72dc32422d8b"
   }
 }

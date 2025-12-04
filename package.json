@@ -22,12 +22,16 @@
   },
   "private": true,
   "dependencies": {
+    "@abacritt/angularx-social-login": "^2.5.1",
     "@angular/common": "^20.1.0",
     "@angular/compiler": "^20.1.0",
     "@angular/core": "^20.1.0",
     "@angular/forms": "^20.1.0",
     "@angular/platform-browser": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "bootstrap": "^5.3.8",
+    "google-one-tap": "^1.0.6",
+    "ngx-infinite-scroll": "^20.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

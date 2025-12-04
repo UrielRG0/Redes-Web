@@ -1,0 +1,26 @@
+.main-bg{
+  margin: 0%;
+  width: 100%;  
+  min-height: 100vh;
+  background: linear-gradient(135deg,
+    #002D5d,
+    #41a6a2,
+    #bbd8d6,
+    #41a6a2
+  )!important;
+}
+::ng-deep .bg-modal .modal-content {
+  background: linear-gradient(135deg,
+    #3a0c3f,
+    #58104d,
+    #6b1460,
+    #4a0d54
+  ) !important;
+  color: white;
+}
+
+
+.logo{
+ filter: drop-shadow(0 0 10px #6b1460)
+          drop-shadow(0 0 20px #6b1460);
+}

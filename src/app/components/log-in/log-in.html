@@ -1,0 +1,79 @@
+<div class="container-fluid main-bg text-white vh-100 d-flex justify-content-center" >
+  <div class="col-md-4 d-none d-md-flex justify-content-center align-items-center">
+    <img class="logo" src="Gallo2.png" alt="">
+  </div>
+    <div class="col-12 col-md-4 d-flex flex-column justify-content-center px-5">
+
+    <h1 class="mb-4 fw-bold" style="color: #FFC107; text-align: center;">Que ocurre en la UAA?</h1>
+    <h4 class="mb-4" style="text-align: center;" > Informate Hoy</h4>
+    <h5 class="mb-4" >Eventos y asusntos de interes, todo entorno a la universidad</h5>
+    <h5 class="mb-4" style="color: #FFC107;" >Soy Universitario:</h5>
+    <button class="btn w-100 rounded-pill mb-3" style="background-color:#222222; color: aliceblue;"
+          data-bs-toggle="modal" 
+          data-bs-target="#registroModal">
+      Crear cuenta
+    </button>
+    <h5 class="mb-4"  style="color:#1E88E5">Quiero ingresar como invitado:</h5>
+    <div id="googleBtn">
+    </div>
+    <small class="text-secondary">
+      Al registrarte aceptas los términos de servicio y privacidad.
+    </small>
+
+    <div class="mt-4">
+      <h5 style="color: #1E88E5;">¿Ya tienes cuenta?</h5>
+      <button class="btn  w-100 rounded-pill"  style="background-color:#222222; color: aliceblue;">
+        Iniciar sesión
+      </button>
+    </div>
+
+  </div>
+   
+</div>
+  <!-- MODAL -->
+  <div class="modal fade bg-modal" 
+       id="registroModal" 
+       data-bs-backdrop="static" 
+       data-bs-keyboard="false" 
+       tabindex="-1" 
+       aria-labelledby="registroModalLabel" 
+       aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <p>Nombre: 
+            <input [(ngModel)]="datos.nombre" type="text" class="form-control">
+          </p>
+
+          <p>Correo: 
+            <input [(ngModel)]="datos.correo" type="email" class="form-control">
+          </p>
+
+          <p>Pass:   
+            <input [(ngModel)]="datos.password" type="password" class="form-control">
+          </p>
+
+          <p>Foto:   
+            <input (change)="onFotoSeleccionada($event)" type="file" class="form-control">
+          </p>
+
+          <button (click)="enviarRegistro()" 
+                  class="btn btn-success w-100 mt-3">
+            Enviar al Servidor
+          </button>
+          <button type="button"
+            class="btn btn-secondary w-100 mt-2"
+            data-bs-dismiss="modal">
+                    Cerrar
+            </button>
+
+          <h3 class="mt-3 text-center">{{ mensaje }}</h3>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
