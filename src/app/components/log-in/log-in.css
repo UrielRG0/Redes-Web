@@ -10,12 +10,9 @@
   )!important;
 }
 ::ng-deep .bg-modal .modal-content {
-  background: linear-gradient(135deg,
-    #3a0c3f,
-    #58104d,
-    #6b1460,
-    #4a0d54
-  ) !important;
+  background: #222222 !important;
+  filter: drop-shadow(0 0 10px #3a0c3f)
+          drop-shadow(0 0 20px #3a0c3f);
   color: white;
 }
 
