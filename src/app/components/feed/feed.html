@@ -1,11 +1,18 @@
-<!--<div
-class="feed-containter"
-infiniteScroll
-[infiniteScrollDistance]="2"
-[infiniteScrollThrottle]="150"
-(scrolled)="loadMorePosts()">iempo de espera para ejecutar nuevamente la funcion
-    <app-post-card
-        *ngFor="let post of posts"
-        [post]="post">
-    </app-post-card>
-</div>-->
+<div
+  class="feed-containter"
+  #scrollable
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="150"
+  (scrolled)="loadMorePosts()" 
+> 
+     <app-navbar></app-navbar>
+  <app-post-card
+      *ngFor="let post of posts" 
+      [post]="post"
+  >
+  </app-post-card>
+
+  <div *ngIf="isLoading" style="text-align: center;">Cargando más...</div>
+
+</div>

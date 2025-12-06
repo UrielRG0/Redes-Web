@@ -4,6 +4,6 @@ import { Feed } from './components/feed/feed';
 
 export const routes: Routes = [
     { path: 'login', component: LogIn },
-    { path:'feed',component:Feed},
+    { path:'home',component:Feed},
     { path: '**', component:LogIn}
 ];

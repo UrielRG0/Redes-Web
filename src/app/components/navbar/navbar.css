@@ -1,5 +1,10 @@
 #navbar{
-    background-color: #102b4e !important;
+   background: linear-gradient(135deg,
+    #3a0c3f,
+    #58104d,
+    #6b1460,
+    #4a0d54
+  )!important;
 }
 .container{
     margin: 0;

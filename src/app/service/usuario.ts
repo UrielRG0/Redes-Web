@@ -45,4 +45,10 @@ export class Usuario {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     });
   }
+  loginGoogle(datos: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/login-google`, datos);
+  }
+  obtenerDatosUsuario(dato: string | number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/buscar/${dato}`);
+  }
 }

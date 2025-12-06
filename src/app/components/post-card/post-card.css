@@ -1,0 +1,162 @@
+/* --- CONTENEDOR PRINCIPAL --- */
+.post-card {
+    background-color:  #222222 ;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Sombra sutil FB */
+    margin-bottom: 16px;
+    width: 100%;
+    max-width: 680px; /* Ancho máximo estándar */
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    overflow: hidden; /* Para que nada se salga de los bordes redondeados */
+}
+
+/* --- HEADER --- */
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    cursor: pointer;
+    border: 1px solid  #222222 ; /* Borde gris muy tenue */
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Ocupa el espacio restante */
+}
+
+.author-name {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #ced0d4;
+    cursor: pointer;
+}
+
+.author-name:hover {
+    color: #ced0d4;
+}
+
+.post-meta {
+    font-size: 13px;
+    color: #65676b; /* Color gris clásico de texto secundario */
+    display: flex;
+    align-items: center;
+}
+
+.dot {
+    margin: 0 4px;
+    font-weight: bold;
+}
+
+.post-menu {
+    font-weight: bold;
+    color: #65676b;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 50%;
+}
+.post-menu:hover {
+    background-color: #f0f2f5;
+}
+
+/* --- BODY --- */
+.post-text {
+    padding: 4px 16px 16px;
+    margin: 0;
+    font-size: 15px;
+    color: #ced0d4;
+    line-height: 1.5; /* Mejor lectura */
+}
+
+.media-container {
+    width: 100%;
+    background-color:  #222222 ; /* Fondo gris si la imagen no carga */
+    display: flex;
+    flex-direction: column;
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+    max-height: 600px; /* Evitar imágenes eternas */
+    object-fit: cover; /* Recorte inteligente */
+    border-top: 1px solid #ced0d4;
+    border-bottom: 1px solid #ced0d4;
+}
+
+/* --- FOOTER --- */
+.post-footer {
+    padding: 0 16px;
+}
+
+/* Fila de contadores (likes, comentarios) */
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ced0d4; /* Línea divisoria */
+    color: #65676b;
+    font-size: 14px;
+}
+
+.like-icon-circle {
+    background: #1877f2; /* Azul FB */
+    color: white;
+    border-radius: 50%;
+    padding: 2px;
+    font-size: 10px;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+}
+
+/* Fila de botones */
+.actions-row {
+    display: flex;
+    justify-content: space-evenly; /* Espacio igual entre botones */
+    padding: 4px 0;
+    margin: 4px 0;
+}
+
+.action-btn {
+    background: transparent;
+    border: none;
+    flex: 1; /* Todos los botones del mismo ancho */
+    padding: 6px 0;
+    border-radius: 4px;
+    color: #65676b;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.action-btn:hover {
+    background-color: #f0f2f5; /* Gris claro al pasar mouse */
+}
+
+/* Estado activo (Like dado) */
+.active-like {
+    color: #1877f2 !important; /* Azul FB */
+}

@@ -3,7 +3,7 @@ import { Usuario } from '../../service/usuario'; // Asegúrate que este servicio
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { jwtDecode } from "jwt-decode";
 
 declare const google: any;
 
@@ -17,7 +17,7 @@ declare const google: any;
 export class LogIn implements OnInit {
 
   // --- VARIABLES PARA EL FLUJO DE 3 PASOS ---
-  paso: number = 1; // 1: Correo, 2: Código, 3: Datos Finales
+  paso: number = 1;
   codigoVerificacion: string = '';
 
   datos = { 
@@ -124,7 +124,7 @@ export class LogIn implements OnInit {
     formData.append('nombre', this.datos.nombre);
     formData.append('correo', this.datos.correo);
     formData.append('password', this.datos.password);
-    
+
     // Solo agregar la foto si existe
     if (this.foto) {
       formData.append('foto', this.foto);
@@ -171,6 +171,24 @@ export class LogIn implements OnInit {
   }
   handleCredentialResponse(response: any) {
     const idToken = response.credential;
-    console.log("Token Google: ", idToken);
-  }
+    
+    // 1. Decodificar el token para sacar los datos
+    const decoded: any = jwtDecode(idToken);
+    
+    // decoded contiene: email, name, picture, etc.
+    const datosParaBackend = {
+        correo: decoded.email,
+        nombre: decoded.name,
+        fotoUrl: decoded.picture
+    };
+
+    // 2. Llamar a TU backend
+    this.usuarioService.loginGoogle(datosParaBackend).subscribe({
+        next: (usuarioBackend) => {
+            sessionStorage.setItem('usuario', JSON.stringify(usuarioBackend));
+            this.router.navigate(['/home']);
+        },
+        error: (err) => alert("Error al iniciar con Google")
+    });
+}
 }

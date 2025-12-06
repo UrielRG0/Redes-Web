@@ -1,26 +1,34 @@
-<!--<div class="post-card">
+<div class="post-card">
     <div class="post-header">
-        <div>
-            <img class="avatar" src="person.png" alt="">
+        <img class="avatar" [src]="avatarUrl" alt="Avatar">
+        <div class="userInfo">
+            <h4 class="author-name" style="color: ced0d4;">{{ nombreAutor }}</h4>
+            <div class="post-meta">
+                <small>{{ post.createdAt | date: 'mediumDate' }}</small>
+                <span class="dot">·</span>
+                </div>
         </div>
-       <div class="userInfo">
-        <h4>Autor</h4>
-        <small>fechapost</small>
-       </div>
+        <div class="post-menu">...</div>
     </div>
     <div class="post-body">
-        <p class="post-text">
-            post del texto
-        </p>
-         <img
-            *ngIf="post.image"
-            class="post-image"
-            [src]="post.image"
-            alt="Post image"
-        />
+        <p class="post-text">{{ post.description }}</p>
+        
+        <div *ngIf="post.imagePaths && post.imagePaths.length > 0" class="media-container">
+            <img 
+                *ngFor="let img of post.imagePaths"
+                class="post-image"
+                [src]="getPostImageUrl(img)" 
+                alt="Imagen del post"
+            />
+        </div>
     </div>
+
     <div class="post-footer">
-        <button (click)="toogleLike()"></button>
-        <button (click)=""></button>
+        <div class="stats-row">
+
+        </div>
+
+        <div class="actions-row">
+        </div>
     </div>
-</div>-->
+</div>
