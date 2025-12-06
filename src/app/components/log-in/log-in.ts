@@ -146,22 +146,49 @@ export class LogIn implements OnInit {
       }
     });
   }
-  iniciarSesion() {
-    this.usuarioService.login(this.datos.correo, this.datos.password).subscribe({
-        next: (usuario: any) => {
-            console.log("Login exitoso:", usuario);
-            
-            sessionStorage.setItem('usuario', JSON.stringify(usuario));
-            if(usuario.rol === 'admin') {
-            } else {
-                this.router.navigate(['/feed'])
-            }
-            alert("Bienvenido " + usuario.nombre);
-        },
-        error: (err) => {
-            alert("Error: Credenciales incorrectas");
-        }
-    });
+iniciarSesion() {
+  // 1. Validaciones básicas antes de llamar al backend
+  if (!this.datos.correo || !this.datos.password) {
+    this.mensaje = 'Por favor ingresa correo y contraseña.';
+    return;
+  }
+
+  this.mensaje = 'Iniciando sesión...';
+
+  // 2. Llamada al servicio
+  this.usuarioService.login(this.datos.correo, this.datos.password).subscribe({
+    next: (usuario: any) => {
+      console.log("Login exitoso:", usuario);
+      
+      // 3. Guardar sesión
+      sessionStorage.setItem('usuario', JSON.stringify(usuario));
+
+      // 4. Cerrar el modal programáticamente
+      // (Truco simple: simular clic en el botón cancelar que tiene data-bs-dismiss)
+      const btnClose = document.getElementById('btnCloseLogin');
+      if (btnClose) btnClose.click();
+
+      // 5. Redireccionar
+      if (usuario.rol === 'admin') {
+         // Ajusta la ruta de admin si la tienes
+         this.router.navigate(['/admin-dashboard']); 
+      } else {
+         this.router.navigate(['/home']); // O '/home'
+      }
+      
+      // Limpiar mensaje
+      this.mensaje = '';
+    },
+    error: (err) => {
+      console.error(err);
+      // Manejo de errores más amigable
+      if (err.status === 401 || err.status === 404) {
+        this.mensaje = 'Correo o contraseña incorrectos.';
+      } else {
+        this.mensaje = 'Error de conexión. Intenta más tarde.';
+      }
+    }
+  });
 }
   resetFormulario() {
     this.datos = { nombre: '', correo: '', password: '' ,rol:'invitado',isAdmin:false, idUsuario:0};
