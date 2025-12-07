@@ -62,4 +62,22 @@ export class Usuario {
   obtenerDepartamentoPorId(id: number): Observable<any> {
     return this.http.get(`${this.catalogosUrl}/departamentos/${id}`);
   }
+
+
+  // Coincide con tu Postman: PUT a /api/usuarios/{id}
+  actualizarUsuario(id: number, data: FormData): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}`, data);
+  }
+
+  // Aunque no vi "eliminarUsuario" en tu JSON, basándome en "eliminarCarrera" o "DeleteEvento",
+  // la lógica estándar de tu backend es DELETE a /api/entidad/{id}
+  eliminarUsuario(idUsuarioAEliminar: number, idSolicitante: number): Observable<any> {
+    // Configuramos los parámetros de la URL (?idSolicitante=...)
+    let params = new HttpParams().set('idSolicitante', idSolicitante.toString());
+
+    return this.http.delete(`${this.baseUrl}/${idUsuarioAEliminar}`, { 
+      params: params,
+      responseType: 'text' 
+    });
+  }
 }
