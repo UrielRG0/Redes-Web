@@ -6,11 +6,16 @@
     #4a0d54
   )!important;
     height: 60px;
-  
+   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     z-index: 1000;
 }
-.container{
+
+.container {
     margin: 0;
+    /* Aseguramos que el contenedor ocupe el ancho necesario si usas container-fluid */
+    max-width: 100%; 
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 /* --- BUSCADOR CENTRAL --- */
 .navbar-center {

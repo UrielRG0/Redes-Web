@@ -6,10 +6,7 @@
   [infiniteScrollThrottle]="150"
   (scrolled)="loadMorePosts()" 
 > 
-<div class="navbar">
-    <app-navbar></app-navbar>
-</div>
-
+     
   <app-post-card
       *ngFor="let post of posts" 
       [post]="post"

@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 })
 export class Usuario {
   private baseUrl = 'https://172.25.124.29:8443/socialNetUAA/api/usuarios';
+  // Agregamos la base para catalogos según tu Postman
+  private catalogosUrl = 'https://172.25.124.29:8443/socialNetUAA/api/catalogos';
   constructor(private http: HttpClient) { }
 
 
@@ -50,5 +52,14 @@ export class Usuario {
   }
   obtenerDatosUsuario(dato: string | number): Observable<any> {
     return this.http.get(`${this.baseUrl}/buscar/${dato}`);
+  }
+
+  // --- NUEVOS MÉTODOS BASADOS EN TU POSTMAN (Carpeta Catalogo) ---
+  obtenerCarreraPorId(id: number): Observable<any> {
+    return this.http.get(`${this.catalogosUrl}/carreras/${id}`);
+  }
+
+  obtenerDepartamentoPorId(id: number): Observable<any> {
+    return this.http.get(`${this.catalogosUrl}/departamentos/${id}`);
   }
 }

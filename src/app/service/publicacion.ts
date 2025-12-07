@@ -14,25 +14,27 @@ export class Publicacion {
    * @param idEvento (Opcional) ID del evento para filtrar.
    * @param listaIntereses (Opcional) Array de IDs de intereses para filtrar.
    */
-// En service/publicacion.ts
+  obtenerPublicaciones(idEvento?: number, listaIntereses?: number[], idUsuario?: number, busqueda?: string): Observable<PublicacionInterface[]> {
+    
+    let params = new HttpParams();
 
-  obtenerPublicaciones(
-      idEvento?: number, 
-      intereses?: number[], 
-      busqueda?: string // <--- Nuevo parámetro opcional
-  ): Observable<PublicacionInterface[]> {
+    // 1. Filtro por Evento (Valor único -> usamos set)
+    if (idEvento) {
+      params = params.set('idEvento', idEvento.toString());
+    }
 
-      let params = new HttpParams();
-
-      if (idEvento) params = params.set('idEvento', idEvento);
-      
-      if (intereses && intereses.length > 0) {
-          intereses.forEach(id => params = params.append('idInteres', id));
-      }
-
-      // Agregamos la búsqueda si existe
-      if (busqueda) params = params.set('busqueda', busqueda);
-
-      return this.http.get<PublicacionInterface[]>(this.baseUrl, { params });
+    // 2. Filtro por Intereses (Lista -> usamos append en bucle)
+    // Esto genera una URL tipo: ...?idInteres=1&idInteres=5&idInteres=8
+    if (listaIntereses && listaIntereses.length > 0) {
+      listaIntereses.forEach(id => {
+        params = params.append('idInteres', id.toString());
+      });
+    }
+    if (busqueda) params = params.set('busqueda', busqueda);
+    // --- NUEVO: Filtro por Usuario ---
+    if (idUsuario) {
+      params = params.set('idUsuario', idUsuario.toString());
+    }
+    return this.http.get<PublicacionInterface[]>(this.baseUrl, { params });
   }
 }

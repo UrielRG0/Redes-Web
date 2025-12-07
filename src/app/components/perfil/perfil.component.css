@@ -1,0 +1,210 @@
+/* Contenedor Principal */
+.perfil-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 85vh;
+  background-color: #f0f2f5;
+  padding: 20px;
+}
+
+/* Tarjeta */
+.card-perfil {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.card-perfil:hover {
+  transform: translateY(-5px);
+}
+
+/* Fondo decorativo superior */
+.card-header-bg {
+  height: 120px;
+  background: linear-gradient(135deg, #003366, #0056b3); /* Azul institucional */
+}
+
+/* Contenido de la tarjeta */
+.card-content {
+  padding: 0 25px 30px;
+  margin-top: -60px; /* Sube el contenido para solapar el header */
+}
+
+/* Foto de Perfil */
+.img-container {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 5px solid white;
+  object-fit: cover;
+  background-color: #ddd;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Tipografía */
+.user-name {
+  margin: 10px 0 5px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+/* Badge de Rol */
+.badge-rol {
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.rol-alumno {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.rol-admin {
+  background-color: #fce4ec;
+  color: #c2185b;
+}
+
+.divider {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #eee;
+}
+
+/* Lista de Detalles */
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon {
+  font-size: 1.2rem;
+  background-color: #f5f7fa;
+  padding: 8px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info small {
+  display: block;
+  color: #888;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.info p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.check-verified {
+  color: #28a745;
+  margin-left: 5px;
+}
+
+/* Botón Editar */
+.btn-editar {
+  margin-top: 25px;
+  width: 100%;
+  padding: 10px;
+  background-color: #003366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-editar:hover {
+  background-color: #002244;
+}
+
+/* Animación de entrada */
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.text-danger { color: #dc3545; }
+.fw-bold { font-weight: bold; }
+
+
+.perfil-wrapper {
+  /* Cambiamos a flex-direction column para que los posts salgan abajo */
+  flex-direction: column; 
+  gap: 30px; /* Espacio entre la tarjeta de info y los posts */
+  padding-bottom: 50px;
+}
+
+/* Contenedor del Muro */
+.muro-container {
+  width: 100%;
+  max-width: 600px; /* Un poco más ancho que la tarjeta de perfil para los posts */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.muro-titulo {
+  font-size: 1.4rem;
+  color: #444;
+  font-weight: 700;
+  margin-bottom: 10px;
+  border-left: 5px solid #003366;
+  padding-left: 10px;
+}
+
+.post-wrapper {
+  /* Asegura que el post-card no se desborde */
+  width: 100%;
+}
+
+/* Estado Vacío */
+.empty-state {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  color: #666;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Ajuste Responsive */
+@media (max-width: 768px) {
+  .muro-container {
+    width: 100%;
+  }
+}
