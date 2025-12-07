@@ -1,42 +1,55 @@
-/* Contenedor Principal */
+/* =========================================
+   TEMA OSCURO - PERFIL
+   ========================================= */
+
+/* Contenedor Principal (Ya estaba oscuro, se mantiene) */
 .perfil-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 85vh;
-  background-color: #1c1e21;
+  background-color: #1c1e21; /* Fondo principal oscuro */
   padding: 20px;
+  /* Ajustes para el muro debajo */
+  flex-direction: column; 
+  gap: 30px;
+  padding-bottom: 50px;
 }
 
-/* Tarjeta */
+/* --- Tarjeta Principal --- */
 .card-perfil {
-  background: white;
+  /* CAMBIO: Fondo oscuro para la tarjeta */
+  background: #2a2d32; 
   width: 100%;
   max-width: 400px;
   border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  /* Sombra más suave para fondo oscuro */
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3); 
   overflow: hidden;
   position: relative;
   transition: transform 0.3s ease;
+  /* Opcional: un borde sutil para separarlo del fondo */
+  border: 1px solid #3f4248;
 }
 
 .card-perfil:hover {
   transform: translateY(-5px);
 }
 
-/* Fondo decorativo superior */
+/* --- Fondo decorativo superior --- */
 .card-header-bg {
   height: 120px;
-  background: linear-gradient(135deg, #003366, #0056b3); /* Azul institucional */
+  /* CAMBIO: Gradiente Morado en lugar de azul */
+  background: linear-gradient(135deg, #6a1b9a, #ab47bc);
 }
 
 /* Contenido de la tarjeta */
 .card-content {
   padding: 0 25px 30px;
-  margin-top: -60px; /* Sube el contenido para solapar el header */
+  margin-top: -60px;
 }
 
-/* Foto de Perfil */
+/* --- Foto de Perfil --- */
 .img-container {
   display: flex;
   justify-content: center;
@@ -46,21 +59,23 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  border: 5px solid white;
+  /* CAMBIO: El borde debe coincidir con el color de fondo de la tarjeta (#2a2d32) */
+  border: 5px solid #2a2d32;
   object-fit: cover;
   background-color: #ddd;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* Tipografía */
+/* --- Tipografía General --- */
 .user-name {
   margin: 10px 0 5px;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #333;
+  /* CAMBIO: Texto blanco */
+  color: #ffffff;
 }
 
-/* Badge de Rol */
+/* --- Badges de Rol --- */
 .badge-rol {
   font-size: 0.75rem;
   padding: 4px 12px;
@@ -69,20 +84,25 @@
   letter-spacing: 0.5px;
 }
 
+/* CAMBIO: Ajustar colores de los roles para fondo oscuro */
 .rol-alumno {
-  background-color: #e3f2fd;
-  color: #1976d2;
+  /* Morado claro para alumno */
+  background-color: #7b1fa2;
+  color: #ffffff;
 }
 
 .rol-admin {
-  background-color: #fce4ec;
-  color: #c2185b;
+  /* Rosa/Rojo para admin */
+  background-color: #c2185b;
+  color: #ffffff;
 }
 
+/* --- Divisor --- */
 .divider {
   margin: 20px 0;
   border: 0;
-  border-top: 1px solid #eee;
+  /* CAMBIO: Divisor más oscuro y sutil */
+  border-top: 1px solid #44474d;
 }
 
 /* Lista de Detalles */
@@ -98,9 +118,11 @@
   gap: 15px;
 }
 
+/* --- Iconos de detalles --- */
 .icon {
   font-size: 1.2rem;
-  background-color: #f5f7fa;
+  /* CAMBIO: Fondo del icono más oscuro */
+  background-color: #3a3d42;
   padding: 8px;
   border-radius: 50%;
   width: 40px;
@@ -110,9 +132,11 @@
   align-items: center;
 }
 
+/* --- Textos de información --- */
 .info small {
   display: block;
-  color: #888;
+  /* CAMBIO: Color de título pequeño más claro (gris claro) */
+  color: #b0b0b0;
   font-size: 0.8rem;
   font-weight: 600;
   margin-bottom: 2px;
@@ -121,58 +145,22 @@
 .info p {
   margin: 0;
   font-size: 0.95rem;
-  color: #2c3e50;
+  /* CAMBIO: Color del dato principal (casi blanco) */
+  color: #e0e0e0;
   font-weight: 500;
 }
 
 .check-verified {
-  color: #28a745;
+  color: #28a745; /* El verde sigue viéndose bien */
   margin-left: 5px;
 }
 
-/* Botón Editar */
-.btn-editar {
-  margin-top: 25px;
-  width: 100%;
-  padding: 10px;
-  background-color: #003366;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-editar:hover {
-  background-color: #002244;
-}
-
-/* Animación de entrada */
-.fade-in {
-  animation: fadeIn 0.6s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.text-danger { color: #dc3545; }
-.fw-bold { font-weight: bold; }
-
-
-.perfil-wrapper {
-  /* Cambiamos a flex-direction column para que los posts salgan abajo */
-  flex-direction: column; 
-  gap: 30px; /* Espacio entre la tarjeta de info y los posts */
-  padding-bottom: 50px;
-}
+/* --- Ajustes adicionales para la sección del muro (fuera de la card) --- */
 
 /* Contenedor del Muro */
 .muro-container {
   width: 100%;
-  max-width: 600px; /* Un poco más ancho que la tarjeta de perfil para los posts */
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -180,29 +168,51 @@
 
 .muro-titulo {
   font-size: 1.4rem;
-  color: #444;
+  /* CAMBIO: Título claro */
+  color: #e0e0e0;
   font-weight: 700;
   margin-bottom: 10px;
-  border-left: 5px solid #003366;
+  /* CAMBIO: Borde morado */
+  border-left: 5px solid #9c27b0;
   padding-left: 10px;
 }
 
 .post-wrapper {
-  /* Asegura que el post-card no se desborde */
   width: 100%;
 }
 
 /* Estado Vacío */
 .empty-state {
-  background-color: white;
+  /* CAMBIO: Fondo oscuro para estado vacío */
+  background-color: #2a2d32;
   padding: 30px;
   border-radius: 12px;
   text-align: center;
-  color: #666;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  /* CAMBIO: Texto claro */
+  color: #b0b0b0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid #3f4248;
 }
 
-/* Ajuste Responsive */
+/* Utilidades */
+.text-danger { color: #ff5252; } /* Rojo más brillante para fondo oscuro */
+.fw-bold { font-weight: bold; }
+
+/* Animación de entrada (se mantiene igual) */
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Loading text */
+.loading-spinner, .alert-error {
+    color: white;
+    text-align: center;
+}
+
 @media (max-width: 768px) {
   .muro-container {
     width: 100%;
