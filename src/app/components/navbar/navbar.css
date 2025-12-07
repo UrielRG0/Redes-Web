@@ -5,7 +5,70 @@
     #6b1460,
     #4a0d54
   )!important;
+    height: 60px;
+  
+    z-index: 1000;
 }
 .container{
     margin: 0;
+}
+/* --- BUSCADOR CENTRAL --- */
+.navbar-center {
+    flex-grow: 1;
+    max-width: 600px; /* No más ancho que esto */
+    margin: 0 20px;
+}
+
+.search-bar-container {
+    background-color: #7c186f; /* Gris claro Facebook */
+    border-radius: 50px; /* Píldora */
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    color: #65676b;
+    margin-right: 8px;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    outline: none;
+    font-size: 15px;
+    color: #050505;
+}
+
+/* --- SECCIÓN DERECHA (PERFIL) --- */
+.profile-container {
+    cursor: pointer;
+    position: relative;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Círculo perfecto */
+    object-fit: cover; /* Evita que la imagen se estire */
+    border: 1px solid #ddd;
+    transition: filter 0.2s;
+}
+
+.profile-img:hover {
+    filter: brightness(0.9); /* Efecto hover sutil */
+}
+
+/* Botones extra (Home) */
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+}
+.btn-icon:hover {
+    background-color: #f0f2f5;
 }

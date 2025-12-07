@@ -1,5 +1,8 @@
 .body{
     width: 100vw;
     min-height: 100vh;
-    background-color: #0f0d0f;
+    background-color: #0f0d0f!important;
+}
+.navbar{
+    margin-bottom: 100px;
 }

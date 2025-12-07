@@ -1,45 +1,47 @@
-import { Component, OnInit } from '@angular/core'; // IMPORTANTE: Agregamos OnInit
-import { PublicacionInterface } from '../../models/PublicacionInterface';
-// --- Imports de Módulos y Componentes ---
-import { CommonModule } from '@angular/common'; // Para *ngFor, *ngIf, etc.
-// Importar el componente PostCard (Asumo que está en la misma carpeta o ruta similar)
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PostCard } from '../post-card/post-card';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll'; 
-import { Publicacion } from '../../service/publicacion';
 import { Navbar } from '../navbar/navbar';
-// ----------------------------------------
+import { PublicacionInterface } from '../../models/PublicacionInterface';
+
+// SERVICIOS
+import { Publicacion } from '../../service/publicacion'; // Tu servicio de API
+import { Busqueda } from '../../service/busqueda'; // <--- EL NUEVO SERVICIO
 
 @Component({
   selector: 'app-feed',
-  // CORRECCIÓN: Los imports son esenciales para un componente Standalone
   standalone: true,
-  imports: [
-    CommonModule, 
-    InfiniteScrollModule, 
-    PostCard,
-    Navbar// <--- CORRECCIÓN: Habilitar el uso de <app-post-card>
-  ], 
+  imports: [CommonModule, InfiniteScrollModule, PostCard, Navbar],
   templateUrl: './feed.html',
   styleUrl: './feed.css',
 })
 export class Feed implements OnInit { 
   
-  // Variables
-  publicaciones: PublicacionInterface[] = [];
-  posts: PublicacionInterface[] = []; // Variable usada en *ngFor
+  posts: PublicacionInterface[] = [];
   
-  // ... (Tus variables de filtro y estado) ...
+  // Variables de Estado
   currentPage: number = 1;
   isLoading: boolean = false;
   hasMorePosts: boolean = true; 
+  
+  // Variables de Filtros
   filtroEvento: number | undefined = undefined; 
   filtrosIntereses: number[] = []; 
+  terminoBusqueda: string = ''; // <--- NUEVA VARIABLE
 
-
-  constructor(private pubService: Publicacion) {} // Asumiendo PublicacionService es correcto
+  constructor(
+      private pubService: Publicacion,
+      private busquedaService: Busqueda // <--- INYECTARLO
+  ) {}
 
   ngOnInit() {
-    this.cargarFeed();
+    // 1. Nos suscribimos al Buscador del Navbar
+    this.busquedaService.terminoBusqueda$.subscribe(termino => {
+        this.terminoBusqueda = termino;
+        // Cada vez que escriban algo, recargamos el feed desde cero
+        this.cargarFeed();
+    });
   }
 
   cargarFeed() {
@@ -49,20 +51,20 @@ export class Feed implements OnInit {
     this.loadMorePosts();
   }
 
-  // CORRECCIÓN: Implementación del método llamado por (scrolled)
   loadMorePosts() {
-    if (this.isLoading || !this.hasMorePosts) {
-      return;
-    }
+    if (this.isLoading || !this.hasMorePosts) return;
     
     this.isLoading = true;
     
-    // Asumiendo que el servicio ya maneja la paginación con query params (page, limit)
-    // O que se trae toda la lista y la paginamos aquí temporalmente:
-    this.pubService.obtenerPublicaciones(this.filtroEvento, this.filtrosIntereses) 
-      .subscribe({
+    // 2. ENVIAMOS TODOS LOS FILTROS AL SERVICIO (Evento, Intereses y Búsqueda)
+    this.pubService.obtenerPublicaciones(
+        this.filtroEvento, 
+        this.filtrosIntereses, 
+        this.terminoBusqueda // <--- PASAMOS EL TÉRMINO
+    ).subscribe({
         next: (data) => {
-          // Lógica de paginación para simular la carga (AJUSTAR ESTO AL SERVICIO REAL DE PAGINACIÓN)
+          // Tu lógica de paginación (slice) está bien para simulación, 
+          // pero idealmente el backend debería paginar.
           const startIndex = (this.currentPage - 1) * 10;
           const nuevosPosts = data.slice(startIndex, startIndex + 10);
           
@@ -77,11 +79,10 @@ export class Feed implements OnInit {
         },
         error: (err) => {
           this.isLoading = false;
-          console.error("Error cargando más posts:", err)
+          console.error("Error:", err);
         }
       });
   }
-
   // Función para cuando el usuario marca/desmarca un checkbox de interés
   toggleInteres(idInteres: number) {
     const index = this.filtrosIntereses.indexOf(idInteres);

@@ -27,7 +27,7 @@
     object-fit: cover;
     margin-right: 10px;
     cursor: pointer;
-    border: 1px solid  #222222 ; /* Borde gris muy tenue */
+    border: 1px solid  #FFC107 ; /* Borde gris muy tenue */
 }
 
 .userInfo {
@@ -61,6 +61,8 @@
 }
 
 .post-menu {
+    height: 40px;
+    width: 40px;
     font-weight: bold;
     color: #65676b;
     cursor: pointer;
@@ -111,20 +113,6 @@
     border-bottom: 1px solid #ced0d4; /* Línea divisoria */
     color: #65676b;
     font-size: 14px;
-}
-
-.like-icon-circle {
-    background: #1877f2; /* Azul FB */
-    color: white;
-    border-radius: 50%;
-    padding: 2px;
-    font-size: 10px;
-    width: 18px;
-    height: 18px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 4px;
 }
 
 /* Fila de botones */

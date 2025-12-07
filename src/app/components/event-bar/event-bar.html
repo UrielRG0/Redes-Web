@@ -1,0 +1,31 @@
+<div class="stories-wrapper">
+    <h5 class="section-title">Eventos Próximos</h5>
+
+    <div class="stories-container">
+        
+        <div class="story-card create-card">
+            <div class="create-icon-wrapper">
+                <span class="plus-icon">+</span>
+            </div>
+            <div class="story-footer">
+                <p>Crear Evento</p>
+            </div>
+        </div>
+
+        <div 
+            class="story-card" 
+            *ngFor="let evento of eventos"
+            (click)="verDetalleEvento(evento.id)"
+            [style.backgroundImage]="'url(' + getImagenUrl(evento.imagenRuta) + ')'">
+            
+            <div class="story-overlay">
+                <div class="date-badge">
+                    {{ evento.fecha | date:'d MMM' }}
+                </div>
+                
+                <p class="story-title">{{ evento.titulo }}</p>
+            </div>
+        </div>
+
+    </div>
+</div>

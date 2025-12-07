@@ -1,13 +1,36 @@
-<nav class="navbar bg-body-tertiary"id="navbar">
-  <div class="container">
-    <div class="icono">
-            <a class="navbar-brand" style="margin: 0;" href="#">
-                <img src="Gallo2.png" alt="Bootstrap" width="50" height="50">
-            </a>
+<nav class="navbar fixed-top bg-body-tertiary shadow-sm" id="navbar">
+  <div class="container-fluid px-4">
+    
+    <div class="navbar-left d-flex align-items-center">
+        <a class="navbar-brand m-0" href="#">
+            <img src="Gallo2.png" alt="Logo" width="40" height="40">
+        </a>
     </div>
-    <div class="usuario">
-        
-    </div>
-  </div>
 
+    <div class="navbar-center d-none d-md-block">
+        <div class="search-bar-container">
+            <input 
+                type="text" 
+                class="search-input" 
+                placeholder="Buscar eventos, publicaciones o #etiquetas..."
+                [(ngModel)]="terminoBusqueda"
+                (keyup.enter)="buscar()">
+        </div>
+    </div>
+
+    <div class="navbar-right d-flex align-items-center gap-3">
+        
+        <button class="btn-icon" title="Inicio" (click)="irAHome()">
+            
+        </button>
+
+        <div class="profile-container" (click)="irAPerfil()" title="Ver mi perfil">
+            <img 
+                [src]="avatarUrl || 'assets/person.png'" 
+                alt="Mi Perfil" 
+                class="profile-img">
+        </div>
+    </div>
+
+  </div>
 </nav>
