@@ -1,11 +1,28 @@
-#navbar{
-   background: linear-gradient(135deg,
-    #3a0c3f,
-    #58104d,
-    #6b1460,
-    #4a0d54
-  )!important;
+#navbar {
+    background: linear-gradient(135deg,
+        #3a0c3f,
+        #58104d,
+        #6b1460,
+        #4a0d54
+    ) !important;
+    /* Agregamos una sombra suave para que resalte sobre el contenido */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-.container{
+
+.container {
     margin: 0;
+    /* Aseguramos que el contenedor ocupe el ancho necesario si usas container-fluid */
+    max-width: 100%; 
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Efecto hover para el icono de perfil */
+.usuario a {
+    transition: transform 0.2s ease, opacity 0.2s;
+}
+
+.usuario a:hover {
+    transform: scale(1.05); /* Crece un poco al pasar el mouse */
+    opacity: 0.9;
 }

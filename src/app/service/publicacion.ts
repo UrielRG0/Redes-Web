@@ -14,7 +14,7 @@ export class Publicacion {
    * @param idEvento (Opcional) ID del evento para filtrar.
    * @param listaIntereses (Opcional) Array de IDs de intereses para filtrar.
    */
-  obtenerPublicaciones(idEvento?: number, listaIntereses?: number[]): Observable<PublicacionInterface[]> {
+  obtenerPublicaciones(idEvento?: number, listaIntereses?: number[], idUsuario?: number): Observable<PublicacionInterface[]> {
     
     let params = new HttpParams();
 
@@ -29,6 +29,10 @@ export class Publicacion {
       listaIntereses.forEach(id => {
         params = params.append('idInteres', id.toString());
       });
+    }
+    // --- NUEVO: Filtro por Usuario ---
+    if (idUsuario) {
+      params = params.set('idUsuario', idUsuario.toString());
     }
     return this.http.get<PublicacionInterface[]>(this.baseUrl, { params });
   }

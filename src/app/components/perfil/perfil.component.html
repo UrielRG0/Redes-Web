@@ -1,0 +1,90 @@
+<div class="perfil-wrapper">
+  
+  <div *ngIf="loading" class="loading-spinner">
+    Cargando perfil...
+  </div>
+
+  <div *ngIf="!loading && usuario" class="card-perfil fade-in">
+    <div class="card-header-bg"></div>
+
+    <div class="card-content">
+      <div class="img-container">
+        <img [src]="avatarUrl" 
+             alt="Foto de perfil" 
+             class="profile-pic"
+             onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+      </div>
+
+      <div class="text-center mt-3">
+        <h2 class="user-name">{{ usuario.nombre }}</h2>
+        <span class="badge-rol" [ngClass]="{
+          'rol-alumno': usuario.rol === 'alumno',
+          'rol-admin': usuario.rol === 'admin' || usuario.rol === 'maestro'
+        }">{{ usuario.rol | uppercase }}</span>
+      </div>
+
+      <hr class="divider">
+
+      <div class="details-list">
+        
+        <div class="detail-item">
+          <div class="icon">📧</div>
+          <div class="info">
+            <small>Correo Electrónico</small>
+            <p>{{ usuario.correo }} 
+              <span *ngIf="usuario.correoValidado" class="check-verified" title="Correo validado">✔</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <div class="icon">🎓</div>
+          <div class="info">
+            <small>{{ usuario.idCarrera ? 'Carrera' : 'Departamento' }}</small>
+            <p>{{ nombreEntidadAcademica }}</p>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <div class="icon">🔐</div>
+          <div class="info">
+            <small>Tipo de Acceso</small>
+            <p>
+              {{ usuario.esGoogle ? 'Google Account' : 'Credenciales UAA' }}
+              <span *ngIf="usuario.admin" class="text-danger fw-bold">(Administrador)</span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="muro-container fade-in" *ngIf="usuario">
+    
+    <h3 class="muro-titulo">Publicaciones</h3>
+    
+    <div *ngIf="loadingPosts" class="text-center py-3">
+      Cargando actividad...
+    </div>
+
+    <div *ngIf="!loadingPosts && misPublicaciones.length > 0; else noPosts">
+      <div class="post-wrapper" *ngFor="let post of misPublicaciones">
+        <app-post-card [post]="post"></app-post-card>
+      </div>
+    </div>
+
+    <ng-template #noPosts>
+      <div class="empty-state" *ngIf="!loadingPosts">
+        <p>Aún no has realizado ninguna publicación.</p>
+      </div>
+    </ng-template>
+
+  </div>
+
+  <div *ngIf="!loading && !usuario" class="alert-error">
+    <p>⚠️ No se ha iniciado sesión.</p>
+  </div>
+
+</div>
