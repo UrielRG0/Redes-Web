@@ -24,7 +24,7 @@ export class Feed implements OnInit {
   currentPage: number = 1;
   isLoading: boolean = false;
   hasMorePosts: boolean = true; 
-  
+  idUsuario:number|undefined=undefined;
   // Variables de Filtros
   filtroEvento: number | undefined = undefined; 
   filtrosIntereses: number[] = []; 
@@ -59,7 +59,8 @@ export class Feed implements OnInit {
     // 2. ENVIAMOS TODOS LOS FILTROS AL SERVICIO (Evento, Intereses y Búsqueda)
     this.pubService.obtenerPublicaciones(
         this.filtroEvento, 
-        this.filtrosIntereses, 
+        this.filtrosIntereses,
+        this.idUsuario,
         this.terminoBusqueda // <--- PASAMOS EL TÉRMINO
     ).subscribe({
         next: (data) => {
