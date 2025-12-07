@@ -1,46 +1,66 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EventoInterface } from '../../models/EventoInterface';
 import { EventoService } from '../../service/evento';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-event-bar',
-  standalone:true,
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './event-bar.html',
   styleUrl: './event-bar.css',
 })
-export class EventBar {
-  eventos: EventoInterface[] = [];
+export class EventBar implements OnInit {
   
-  // URL base para imágenes de eventos (Ajusta la ruta de tu API)
+  eventos: EventoInterface[] = [];
   private API_EVENTO_IMG = 'https://172.25.124.29:8443/socialNetUAA/api/eventos/imagenes'; 
 
-  constructor(private eventoService: EventoService ) {}
+  constructor(private eventoService: EventoService, private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
     this.cargarEventos();
   }
-
   cargarEventos() {
-    // Asumiendo que tu servicio tiene un método obtenerTodos()
     this.eventoService.obtenerTodos().subscribe({
       next: (data) => {
-        // Ordenamos por fecha (opcional, los más recientes primero)
         this.eventos = data.reverse(); 
+        // TIP: Imprime en consola para verificar que el array 'imagenes' venga lleno
+        console.log('Eventos cargados:', this.eventos);
       },
       error: (e) => console.error(e)
     });
   }
 
-  getImagenUrl(ruta: string | undefined): string {
-    if (!ruta) return 'assets/event-placeholder.jpg'; // Imagen por defecto
-    if (ruta.startsWith('http')) return ruta;
-    return `${this.API_EVENTO_IMG}/${ruta}`;
+  // --- MODIFICACIÓN CLAVE AQUÍ ---
+  // Ahora recibimos el array completo (o undefined)
+  getImagenUrl(imagenes: string[] | undefined): string {
+    
+    // 1. Validación: Si el array es nulo o está vacío
+    if (!imagenes || imagenes.length === 0) {
+        return 'assets/event-placeholder.jpg'; // Imagen por defecto
+    }
+
+    // 2. Tomamos la PRIMERA imagen como portada
+    const rutaPrimeraImagen = imagenes[0];
+
+    // 3. Verificar si es URL completa (Google/Externa) o local
+    if (rutaPrimeraImagen.startsWith('http')) {
+        return rutaPrimeraImagen;
+    }
+
+    // 4. Retornar ruta completa a tu API
+    return `${this.API_EVENTO_IMG}/${rutaPrimeraImagen}`;
+  }
+
+  // Actualizamos el tipo de dato en el parámetro
+  obtenerEstiloBackground(imagenes: string[] | undefined): SafeStyle {
+      // Pasamos el array a la función de arriba
+      const url = this.getImagenUrl(imagenes);
+      return this.sanitizer.bypassSecurityTrustStyle(`url('${url}')`);
   }
 
   verDetalleEvento(id: number) {
     console.log("Ir al evento", id);
-    // Aquí puedes redirigir: this.router.navigate(['/eventos', id]);
   }
 }

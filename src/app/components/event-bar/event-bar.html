@@ -16,13 +16,13 @@
             class="story-card" 
             *ngFor="let evento of eventos"
             (click)="verDetalleEvento(evento.id)"
-            [style.backgroundImage]="'url(' + getImagenUrl(evento.imagenRuta) + ')'">
+            
+            [style.background-image]="obtenerEstiloBackground(evento.imagenes)">
             
             <div class="story-overlay">
-                <div class="date-badge">
+                 <div class="date-badge">
                     {{ evento.fecha | date:'d MMM' }}
                 </div>
-                
                 <p class="story-title">{{ evento.titulo }}</p>
             </div>
         </div>

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { jwtDecode } from "jwt-decode";
+import { Catalogo } from '../../service/catalogos';
 
 declare const google: any;
 
@@ -19,7 +20,8 @@ export class LogIn implements OnInit {
   // --- VARIABLES PARA EL FLUJO DE 3 PASOS ---
   paso: number = 1;
   codigoVerificacion: string = '';
-
+  listaIntereses: any[] = []; 
+  interesesSeleccionados: number[] = [];
   datos = { 
     nombre: '', 
     correo: '', 
@@ -30,7 +32,7 @@ export class LogIn implements OnInit {
   };
   foto: File | null = null;
   mensaje = '';
-  constructor(private usuarioService: Usuario, private router: Router) {}
+  constructor(private usuarioService: Usuario, private router: Router, private catalogoService: Catalogo) {}
 
   ngOnInit(): void {
     // ... Tu lógica de Google se queda igual ...
@@ -60,11 +62,11 @@ export class LogIn implements OnInit {
       return;
     }
 
-    // --- AQUÍ ESTÁ TU VALIDACIÓN ---
-    if (!correoLimpio.endsWith('@edu.uaa.mx')) {
-      this.mensaje = 'Error: Solo se permiten correos institucionales (@edu.uaa.mx)';
-      return; // Detenemos la función aquí
-    }
+    //--- AQUÍ ESTÁ TU VALIDACIÓN ---
+    //if (!correoLimpio.endsWith('@edu.uaa.mx')) {
+      //this.mensaje = 'Error: Solo se permiten correos institucionales (@edu.uaa.mx)';
+      //return; // Detenemos la función aquí
+    //}
     // ------------------------------
 
     this.mensaje = 'Enviando código...';
@@ -94,22 +96,37 @@ export class LogIn implements OnInit {
 
   // --- PASO 2: Validar el código ingresado ---
   validarCodigo() {
-    if (!this.codigoVerificacion) {
-      alert("Ingresa el código recibido");
-      return;
-    }
-    this.mensaje = 'Verificando...';
-
-    // Llamada al backend (endpoint /verificar-codigo)
+    if (!this.codigoVerificacion) { /* ... */ return; }
+    
     this.usuarioService.verificarCodigo(this.datos.correo, this.codigoVerificacion).subscribe({
       next: (res) => {
         this.mensaje = '';
-        this.paso = 3; // Avanzar al llenado de datos
+        this.paso = 3; 
+        
+        // --- NUEVO: CARGAR INTERESES AL LLEGAR AL PASO 3 ---
+        this.cargarInteresesDelSistema();
+        // ---------------------------------------------------
       },
-      error: (err) => {
-        this.mensaje = 'Código incorrecto';
-      }
+      error: (err) => { /* ... */ }
     });
+  }
+cargarInteresesDelSistema() {
+    this.catalogoService.obtenerIntereses().subscribe({
+        next: (data) => {
+            console.log("DATOS RECIBIDOS DEL BACKEND:", data); // <--- AGREGA ESTO
+            this.listaIntereses = data;
+        },
+        error: (e) => console.error("Error cargando catálogo", e)
+    });
+  }
+  toggleInteres(id: number) {
+    if (this.interesesSeleccionados.includes(id)) {
+        // Desmarcar
+        this.interesesSeleccionados = this.interesesSeleccionados.filter(x => x !== id);
+    } else {
+        // Marcar
+        this.interesesSeleccionados.push(id);
+    }
   }
 
   // --- PASO 3: Enviar todos los datos (nombre, pass, foto) ---
@@ -124,8 +141,10 @@ export class LogIn implements OnInit {
     formData.append('nombre', this.datos.nombre);
     formData.append('correo', this.datos.correo);
     formData.append('password', this.datos.password);
-
     // Solo agregar la foto si existe
+    this.interesesSeleccionados.forEach(id => {
+        formData.append('intereses', id.toString());
+    });
     if (this.foto) {
       formData.append('foto', this.foto);
     }
@@ -134,11 +153,7 @@ export class LogIn implements OnInit {
         this.mensaje = '¡Registro Exitoso!';
         console.log('Respuesta Java:', resp);
         
-        // Reiniciar formulario y cerrar modal (o cerrarlo manualmente con JS)
         this.resetFormulario();
-        
-        // Opcional: Cerrar modal programáticamente si usas Bootstrap JS nativo,
-        // o dejar que el usuario use el botón "Cerrar".
       },
       error: (err) => {
         this.mensaje = 'Error al guardar: ' + err.message;
@@ -194,7 +209,8 @@ iniciarSesion() {
     this.datos = { nombre: '', correo: '', password: '' ,rol:'invitado',isAdmin:false, idUsuario:0};
     this.foto = null;
     this.codigoVerificacion = '';
-    this.paso = 1; // Volver al inicio por si abre el modal de nuevo
+    this.interesesSeleccionados = []; // <--- LIMPIAR SELECCIÓN
+    this.paso = 1;
   }
   handleCredentialResponse(response: any) {
     const idToken = response.credential;

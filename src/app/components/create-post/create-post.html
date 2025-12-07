@@ -1,0 +1,87 @@
+<div class="create-post-card">
+    <div class="input-trigger-row">
+        <img [src]="avatarUrl" class="user-avatar">
+        <div class="fake-input" (click)="abrirModal()">
+            ¿Qué estás pensando, {{ usuario.nombre }}?
+        </div>
+    </div>
+    
+    <div class="divider"></div>
+
+    <div class="actions-row">
+        <button class="action-btn" (click)="abrirModal()">
+            <span style="color: #45bd62; font-size: 20px;"></span> Foto/Video
+        </button>
+        <button class="action-btn" (click)="abrirModal()">
+            <span style="color:#f7b928; font-size: 20px;"></span> Sentimiento
+        </button>
+    </div>
+</div>
+
+<div class="modal-overlay" *ngIf="mostrarModal">
+    <div class="modal-card scale-in">
+        
+        <div class="modal-header">
+            <h3>Crear publicación</h3>
+            <button class="close-btn" (click)="cerrarModal()">x</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="user-info">
+                <img [src]="avatarUrl" class="user-avatar-small">
+                <span class="fw-bold">{{ usuario.nombre }}</span>
+            </div>
+
+            <textarea style=" background:#242526;"
+                [(ngModel)]="tituloPublicacion" 
+                placeholder="Que Quieres Promocionar?" 
+                rows="1"></textarea>
+            <div class="divider"></div>
+             <textarea style=" background:#242526;"
+                [(ngModel)]="textoPublicacion" 
+                placeholder="Cuentame mas..." 
+                rows="4"></textarea>
+            <div class="img-preview-container" *ngIf="previewImagen">
+                <img [src]="previewImagen">
+                <button class="remove-img" (click)="previewImagen=null; archivoSeleccionado=null"></button>
+            </div>
+
+            <div class="tags-section">
+                <small>Agregar etiquetas:</small>
+                <div class="chips-wrapper">
+                    <button *ngFor="let item of listaIntereses"
+                            class="chip"
+                            [class.active]="interesesSeleccionados.includes(item.idInteres)"
+                            (click)="toggleInteres(item.idInteres)" style="color: #ccc;">
+                        #{{ item.nombre }}
+                    </button>
+                </div>
+            </div>
+            <div class="event-selection mb-3">
+                <select #selectEvento 
+                        [(ngModel)]="idEventoSeleccionado" 
+                        class="form-select custom-select">
+                    <option [ngValue]="null" selected>Sin evento relacionado</option>
+                    <option *ngFor="let evento of listaEventos" [ngValue]="evento.id">
+                        {{ evento.titulo }}
+                    </option>
+                </select>
+            </div>
+            <div class="add-extras">
+                <span>Agregar a tu publicación:</span>
+                <label class="icon-btn" title="Foto"><img src="src.png" alt="">
+                     <input type="file" hidden (change)="onFileSelected($event)" accept="image/*">
+                </label>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-post" 
+                    [disabled]="(!textoPublicacion && !archivoSeleccionado) || isLoading"
+                    (click)="publicar()">
+                {{ isLoading ? 'Publicando...' : 'Publicar' }}
+            </button>
+        </div>
+
+    </div>
+</div>

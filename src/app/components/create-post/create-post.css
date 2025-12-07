@@ -1,0 +1,182 @@
+
+.create-post-card {
+    background: #141618; /* --bg-card */
+    border: 1px solid #2f3031; /* Borde sutil para definir la tarjeta */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #E4E6EB; /* Texto blanco hueso */
+}
+
+.input-trigger-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #6b1460;
+}
+
+.fake-input {
+   background-color: #242526; /* --bg-input */
+    border-radius: 20px;
+    padding: 10px 15px;
+    flex-grow: 1;
+    color: #B0B3B8; /* Texto gris */
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+.fake-input:hover { background-color: #3a3b3c; 
+    color: #E4E6EB; }
+
+.divider { border-bottom: 1px solid #3e4042; /* Gris oscuro en lugar de claro */
+    margin: 8px 0; }
+
+.actions-row { display: flex; justify-content: space-evenly; }
+
+.action-btn {
+    background: none; border: none;
+    padding: 8px; border-radius: 8px;
+    color: #65676b; font-weight: 600; font-size: 14px;
+    cursor: pointer; display: flex; align-items: center; gap: 8px;
+    flex: 1; justify-content: center;
+}
+.action-btn:hover { background-color: rgba(107, 20, 96, 0.2); /* Morado transparente */
+    color: #dcb3e6; }
+
+/* --- MODAL --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85); /* Fondo más oscuro para enfoque */
+    z-index: 2000;
+    display: flex; justify-content: center; align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal-card {
+   background: #242526; width: 100%; max-width: 500px;
+    border-radius: 8px; overflow: hidden; position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.modal-header {
+    padding: 15px; border-bottom: 1px solid#1c1e21; position: relative; text-align: center;
+}
+.modal-header h3 { margin: 0; font-size: 20px; font-weight: bold; }
+.close-btn {
+    background: #3a3b3c;
+    position: absolute; right: 15px; top: 10px; border: none; border-radius: 50%;
+    width: 36px; height: 36px; font-size: 24px; cursor: pointer;
+}
+
+.modal-body { padding: 15px; }
+
+.user-info { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: #ccc; }
+.user-avatar-small { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+
+textarea {
+    width: 100%; border: none; outline: none; font-size: 18px; resize: none;
+    font-family: inherit; margin-bottom: 10px;
+    color: #E4E6EB;
+}
+
+.img-preview-container {
+    position: relative; margin-bottom: 10px;
+    border: 1px solid #ddd; border-radius: 8px; overflow: hidden;
+    max-height: 200px;  /* Ajusta este valor según tu diseño */
+    display: flex;      /* Para centrar la imagen si es más pequeña */
+    justify-content: center;
+    
+}
+.img-preview-container img {width: auto;   
+    height: auto;
+    max-width: 100%; 
+    max-height: 100%; 
+    object-fit: contain;}
+.remove-img {
+    position: absolute; top: 5px; right: 5px;
+    background: #1c1e21; border: none; border-radius: 50%;
+    width: 30px; height: 30px; cursor: pointer;
+}
+
+/* Chips de Intereses */
+.tags-section { margin-bottom: 15px; border-top: 1px solid #eee; padding-top: 10px; }
+.chips-wrapper { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+.chip {
+    background:#1c1e21; border: 1px solid #ccc; border-radius: 15px;
+    padding: 4px 10px; font-size: 12px; cursor: pointer;
+}
+.chip.active { background: #6b1460; 
+    color: #fff; 
+    border-color: #6b1460; 
+    box-shadow: 0 0 8px rgba(107, 20, 96, 0.5); /* Resplandor */ }
+
+/* Add Extras Box */
+.add-extras {
+    border: 1px solid #3e4042;
+    border-radius: 8px; 
+    padding: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: #1e1f20;
+    margin-top: 10px;
+}
+.icon-btn { font-size: 24px; cursor: pointer; padding: 0 5px; }
+
+.modal-footer { padding: 15px; }
+.btn-post {
+   width: 100%; 
+    background: #6b1460; /* Tu morado base */
+    color: #fff; 
+    border: none;
+    padding: 12px; 
+    border-radius: 6px; 
+    font-weight: bold; 
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+.btn-post:hover { 
+    background: #8e1c80; 
+}
+.btn-post:disabled { 
+    background: #3e4042; 
+    color: #8a8d91; 
+    cursor: not-allowed; 
+}
+.custom-select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #3e4042;
+    color: #ccc;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.custom-select:hover {
+    background-color: #242526;
+}
+
+.custom-select:focus {
+    border-color: #6b1460;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
+
+.event-selection {
+    background-color: #242526;
+    padding: 5px 0;
+}

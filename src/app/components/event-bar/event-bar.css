@@ -1,8 +1,8 @@
 .stories-wrapper {
     background-color:  #1c1e21;
-    padding: 15px 0 15px 15px; /* Padding izquierdo para que empiece separado */
+    padding: 20px 10 20px 20px; /* Padding izquierdo para que empiece separado */
     border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 0 1px 2px rgba(105, 91, 25, 0.2);
     margin-bottom: 20px; /* Espacio antes de los posts */
     max-width: 680px; /* Mismo ancho que las PostCard */
     margin-left: auto;
@@ -11,8 +11,8 @@
 }
 
 .section-title {
-    color: #65676b;
-    font-size: 14px;
+    color: #6b1460;
+    font-size: 16px;
     font-weight: 600;
     margin-bottom: 10px;
     margin-right: 15px;
@@ -38,6 +38,7 @@
 
 /* --- TARJETA GENÉRICA --- */
 .story-card {
+    margin: 3px 3px 3px 3px;
     min-width: 110px; /* Ancho fijo estilo celular */
     height: 190px;
     border-radius: 12px;
@@ -56,12 +57,15 @@
     filter: brightness(0.95);
 }
 
-/* --- TARJETA DE "CREAR" --- */
 .create-card {
-    background-color:  #141618;
+     margin: 3px 3px 3px 3px;
+   
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
 }
 .create-icon-wrapper {
     background-color: #ffffff;

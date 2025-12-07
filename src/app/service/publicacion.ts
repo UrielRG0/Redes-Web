@@ -37,4 +37,10 @@ export class Publicacion {
     }
     return this.http.get<PublicacionInterface[]>(this.baseUrl, { params });
   }
+  crear(formData: FormData): Observable<PublicacionInterface> {
+    // Angular detecta automáticamente que es FormData y:
+    // 1. Pone el header 'Content-Type: multipart/form-data'
+    // 2. Genera los 'boundaries' correctos para el archivo y el texto.
+    return this.http.post<PublicacionInterface>(`${this.baseUrl}/crear`, formData);
+  }
 }

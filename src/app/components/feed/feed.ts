@@ -9,11 +9,12 @@ import { PublicacionInterface } from '../../models/PublicacionInterface';
 import { Publicacion } from '../../service/publicacion'; // Tu servicio de API
 import { Busqueda } from '../../service/busqueda'; // <--- EL NUEVO SERVICIO
 import { EventBar } from '../event-bar/event-bar';
+import { CreatePost } from '../create-post/create-post';
 
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [CommonModule, InfiniteScrollModule, PostCard, Navbar, EventBar],
+  imports: [CommonModule, InfiniteScrollModule, PostCard, Navbar, EventBar,CreatePost],
   templateUrl: './feed.html',
   styleUrl: './feed.css',
 })
@@ -36,7 +37,13 @@ export class Feed implements OnInit {
       private busquedaService: Busqueda // <--- INYECTARLO
   ) {}
 
+
   ngOnInit() {
+    const usuarioLogueado = JSON.parse(sessionStorage.getItem('usuario') || '{}');
+    if (usuarioLogueado && usuarioLogueado.intereses && usuarioLogueado.intereses.length > 0) {
+        this.filtrosIntereses = usuarioLogueado.intereses;
+    }
+    this.cargarFeed();
     // 1. Nos suscribimos al Buscador del Navbar
     this.busquedaService.terminoBusqueda$.subscribe(termino => {
         this.terminoBusqueda = termino;

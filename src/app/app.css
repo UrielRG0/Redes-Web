@@ -1,5 +1,6 @@
 .html{
     background-color: #1c1e21!important;
+      overflow-x: hidden;
 }
 .navbar{
     padding: 3rem;

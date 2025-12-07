@@ -4,7 +4,7 @@
   </div>
     <div class="col-12 col-md-4 d-flex flex-column justify-content-center px-5">
 
-    <h1 class="mb-4 fw-bold" style="color: #FFC107; text-align: center;">Que ocurre en la UAA?</h1>
+    <h1 class="mb-4 fw-bold" style="color: rgb(255, 193, 7); text-align: center;">Que ocurre en la UAA?</h1>
     <h4 class="mb-4" style="text-align: center;" > Informate Hoy</h4>
     <h5 class="mb-4" >Eventos y asusntos de interes, todo entorno a la universidad</h5>
     <h5 class="mb-4" style="color: #FFC107;" >Soy Universitario:</h5>
@@ -116,19 +116,26 @@
         <div *ngIf="paso === 3">
           <div class="alert alert-success py-2">¡Correo validado! Completa tus datos.</div>
 
-          <p>Nombre: 
-            <input [(ngModel)]="datos.nombre" type="text" class="form-control">
-          </p>
+          <p>Nombre: <input [(ngModel)]="datos.nombre" type="text" class="form-control"></p>
+          <p>Contraseña: <input [(ngModel)]="datos.password" type="password" class="form-control"></p>
+          <p>Foto de Perfil: <input (change)="onFotoSeleccionada($event)" type="file" class="form-control"></p>
 
-          <p>Contraseña:   
-            <input [(ngModel)]="datos.password" type="password" class="form-control">
-          </p>
-
-          <p>Foto de Perfil:   
-            <input (change)="onFotoSeleccionada($event)" type="file" class="form-control">
-          </p>
-
-          <button (click)="enviarRegistroFinal()" class="btn btn-success w-100 mt-3">
+          <div class="mt-3">
+            <p class="fw-bold mb-2">Selecciona tus intereses (para tu feed):</p>
+            
+            <div class="chips-container">
+              <button type="button" 
+                      *ngFor="let item of listaIntereses"
+                      class="chip-btn"
+                      
+                      [class.active]="interesesSeleccionados.includes(item.idInteres)"
+                      (click)="toggleInteres(item.idInteres)">
+                      
+                  {{ item.nombre }}
+              </button>
+          </div>
+          </div>
+          <button (click)="enviarRegistroFinal()" class="btn btn-success w-100 mt-4">
              Finalizar Registro
           </button>
         </div>

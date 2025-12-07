@@ -16,7 +16,37 @@
   color: white;
 }
 
+/* Contenedor de los botones */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap; /* Si son muchos, bajan a la siguiente línea */
+    gap: 8px; /* Espacio entre botones */
+    max-height: 150px; /* Opcional: limitar altura si son demasiados */
+    overflow-y: auto;
+}
 
+/* Estilo del botón (chip) desmarcado */
+.chip-btn {
+    background-color: #f0f2f5;
+    border: 1px solid #ddd;
+    border-radius: 20px; /* Redondeado */
+    padding: 6px 14px;
+    font-size: 14px;
+    color: #050505;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chip-btn:hover {
+    background-color: #6b1460;
+}
+
+/* Estilo cuando está SELECCIONADO */
+.chip-btn.active {
+    background-color: #6b1460; /* Azul Facebook/UAA */
+    color: #141618;
+    border-color: #6b1460;
+}
 .logo{
  filter: drop-shadow(0 0 10px #6b1460)
           drop-shadow(0 0 20px #6b1460);

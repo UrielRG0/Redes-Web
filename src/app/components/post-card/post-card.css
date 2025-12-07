@@ -1,8 +1,7 @@
 /* --- CONTENEDOR PRINCIPAL --- */
 .post-card {
-    background-color:  #222222 ;
+    background-color:  #141618 ;
     border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Sombra sutil FB */
     margin-bottom: 16px;
     width: 100%;
     max-width: 680px; /* Ancho máximo estándar */
@@ -82,7 +81,13 @@
     color: #ced0d4;
     line-height: 1.5; /* Mejor lectura */
 }
-
+.post-title{
+    padding: 4px 16px 16px;
+    margin: 0;
+    font-size: 18px;
+    color: #821686;
+    line-height: 1.5; /* Mejor lectura */
+}
 .media-container {
     width: 100%;
     background-color:  #222222 ; /* Fondo gris si la imagen no carga */
@@ -95,8 +100,8 @@
     height: auto;
     max-height: 600px; /* Evitar imágenes eternas */
     object-fit: cover; /* Recorte inteligente */
-    border-top: 1px solid #ced0d4;
-    border-bottom: 1px solid #ced0d4;
+    border-top: 3px solid #6b1460;
+    border-bottom: 3px solid #6b1460;
 }
 
 /* --- FOOTER --- */
@@ -110,7 +115,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid #ced0d4; /* Línea divisoria */
+    border-bottom: 1px solid #6b1460; /* Línea divisoria */
     color: #65676b;
     font-size: 14px;
 }
@@ -126,7 +131,7 @@
 .action-btn {
     background: transparent;
     border: none;
-    flex: 1; /* Todos los botones del mismo ancho */
+    flex: 1; 
     padding: 6px 0;
     border-radius: 4px;
     color: #65676b;
@@ -141,10 +146,22 @@
 }
 
 .action-btn:hover {
-    background-color: #f0f2f5; /* Gris claro al pasar mouse */
+    background-color: #FFC107; /* Gris claro al pasar mouse */
+}
+.hashtags-container {
+    display: inline-block;
 }
 
-/* Estado activo (Like dado) */
-.active-like {
-    color: #1877f2 !important; /* Azul FB */
+.hashtag {
+    color: #1877f2; /* Azul link */
+    cursor: pointer;
+    font-weight: 500;
+    margin-right: 6px;
+    transition: text-decoration 0.2s;
+}
+
+.hashtag:hover {
+    text-decoration: underline;
+    background-color: rgba(24, 119, 242, 0.1); /* Fondo azul muy sutil */
+    border-radius: 2px;
 }

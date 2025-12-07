@@ -7,7 +7,8 @@
   [infiniteScrollThrottle]="150"
   (scrolled)="loadMorePosts()" 
 > 
-  <app-event-bar></app-event-bar>   
+    <app-create-post (postCreado)="cargarFeed()"></app-create-post>  
+  <app-event-bar></app-event-bar> 
   <app-post-card
       *ngFor="let post of posts" 
       [post]="post"
