@@ -1,5 +1,5 @@
 .stories-wrapper {
-    background-color: white;
+    background-color:  #1c1e21;
     padding: 15px 0 15px 15px; /* Padding izquierdo para que empiece separado */
     border-radius: 8px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
@@ -58,7 +58,7 @@
 
 /* --- TARJETA DE "CREAR" --- */
 .create-card {
-    background-color: #f0f2f5;
+    background-color:  #141618;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;

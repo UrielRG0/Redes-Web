@@ -8,11 +8,12 @@ import { PublicacionInterface } from '../../models/PublicacionInterface';
 // SERVICIOS
 import { Publicacion } from '../../service/publicacion'; // Tu servicio de API
 import { Busqueda } from '../../service/busqueda'; // <--- EL NUEVO SERVICIO
+import { EventBar } from '../event-bar/event-bar';
 
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [CommonModule, InfiniteScrollModule, PostCard, Navbar],
+  imports: [CommonModule, InfiniteScrollModule, PostCard, Navbar, EventBar],
   templateUrl: './feed.html',
   styleUrl: './feed.css',
 })
