@@ -124,6 +124,25 @@
           <p>Nombre: <input [(ngModel)]="datos.nombre" type="text" class="form-control"></p>
           <p>Contraseña: <input [(ngModel)]="datos.password" type="password" class="form-control"></p>
           <p>Foto de Perfil: <input (change)="onFotoSeleccionada($event)" type="file" class="form-control"></p>
+          <!-- Selector de Carrera (solo para alumnos) -->
+          <div *ngIf="datos.rol === 'alumno'" class="mb-3">
+            <p class="fw-bold">Selecciona tu carrera:</p>
+            <select [(ngModel)]="datos.idCarrera" class="form-select">
+              <option [ngValue]="null">-- Selecciona una carrera --</option>
+              <option *ngFor="let c of listaCarreras" [ngValue]="c.idCarrera">
+                {{ c.nombre }}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="datos.rol === 'profesor'" class="mb-3">
+            <p class="fw-bold">Selecciona tu departamento:</p>
+            <select [(ngModel)]=" datos.idDepartamento" class="form-select">
+              <option [ngValue]="null">-- Selecciona un departamento --</option>
+              <option *ngFor="let d of listaDepartamentos" [ngValue]="d.idDepartamento">
+                {{ d.nombre }}
+              </option>
+            </select>
+          </div>
 
           <div class="mt-3">
             <p class="fw-bold mb-2">Selecciona tus intereses (para tu feed):</p>
