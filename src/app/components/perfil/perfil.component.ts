@@ -30,7 +30,7 @@ export class PerfilComponent implements OnInit {
   previewUrl: string | null = null; // Para previsualizar la nueva foto
 
   nombreEntidadAcademica: string = 'Cargando...'; // Guardará el nombre de la carrera o depto
-  avatarUrl: string = 'assets/img/default-user.png'; // Imagen por defecto
+  avatarUrl: string = 'Gallo2.png'; // Imagen por defecto
   loading: boolean = true;
 
   // Variables para las publicaciones

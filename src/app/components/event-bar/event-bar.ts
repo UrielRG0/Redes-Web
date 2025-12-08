@@ -80,4 +80,5 @@ export class EventBar implements OnInit {
   detenerPropagacion(event: Event) {
     event.stopPropagation();
   }
+  
 }

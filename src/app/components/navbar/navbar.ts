@@ -14,7 +14,7 @@ import { Busqueda } from '../../service/busqueda';
 export class Navbar implements OnInit {
   
   terminoBusqueda: string = '';
-  avatarUrl: string = 'assets/person.png';
+  avatarUrl: string = 'Gallo2.png';
   
   // URL base para imágenes de usuarios (Igual que en PostCard)
   private API_USER_FOTOS = 'https://172.25.124.29:8443/socialNetUAA/api/usuarios/fotos';
@@ -29,14 +29,15 @@ export class Navbar implements OnInit {
       this.cargarUsuarioLogueado();
   }
 
-  cargarUsuarioLogueado() {
+        cargarUsuarioLogueado() {
 
-      const usuario = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-      
-      if (usuario && usuario.fotoRuta) {
-          this.construirUrlAvatar(usuario.fotoRuta);
-      }
-  }
+            const usuario = JSON.parse(sessionStorage.getItem('usuario') || '{}');
+
+            if (usuario && usuario.fotoRuta) {
+                this.construirUrlAvatar(usuario.fotoRuta);
+            }
+        }
+
 
   construirUrlAvatar(ruta: string) {
       if (ruta.startsWith('http')) {

@@ -5,7 +5,7 @@
         <div 
             class="story-card" 
             *ngFor="let evento of eventos"
-            (click)="verDetalleEvento(evento.id)"
+            (click)="abrirModal(evento)"
             
             [style.background-image]="obtenerEstiloBackground(evento.imagenes)">
             
@@ -18,4 +18,47 @@
         </div>
 
     </div>
+</div>
+<!-- MODAL EVENTO -->
+<div 
+  class="evento-modal"
+  *ngIf="eventoSeleccionado"
+  (click)="cerrarModal()">
+
+  <!-- Tarjeta del modal -->
+  <div class="evento-modal-card" (click)="detenerPropagacion($event)">
+
+    <!-- Imagen -->
+    <div 
+      class="evento-modal-img"
+      [style.background-image]="obtenerEstiloBackground(eventoSeleccionado.imagenes)">
+    </div>
+
+    <!-- Contenido -->
+    <div class="evento-modal-body">
+
+      <button class="btn-cerrar" (click)="cerrarModal()">✕</button>
+
+      <h2>{{ eventoSeleccionado.titulo }}</h2>
+
+      <p class="evento-fecha">
+        📆 {{ eventoSeleccionado.fechaInicio | date:'fullDate' }}
+      </p>
+
+      <p class="evento-hora">
+        ⏰ {{ eventoSeleccionado.horaInicio }} - {{ eventoSeleccionado.horaFin }}
+      </p>
+
+      <p class="evento-lugar">
+        📍 {{ eventoSeleccionado.lugar }}
+      </p>
+
+      <hr>
+
+      <p class="evento-descripcion">
+        {{ eventoSeleccionado.description }}
+      </p>
+
+    </div>
+  </div>
 </div>

@@ -103,11 +103,11 @@ export class LogIn implements OnInit {
       return;
     }
 
-    //--- AQUÍ ESTÁ TU VALIDACIÓN ---
-    //if (!correoLimpio.endsWith('@edu.uaa.mx')) {
-      //this.mensaje = 'Error: Solo se permiten correos institucionales (@edu.uaa.mx)';
-      //return; // Detenemos la función aquí
-    //}
+    
+    if (!correoLimpio.endsWith('@edu.uaa.mx')) {
+      this.mensaje = 'Error: Solo se permiten correos institucionales (@edu.uaa.mx)';
+      return; // Detenemos la función aquí
+    }
     // ------------------------------
 
     this.mensaje = 'Enviando código...';

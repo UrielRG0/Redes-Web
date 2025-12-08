@@ -4,6 +4,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PostCard } from '../post-card/post-card';
 import { Navbar } from '../navbar/navbar';
 import { PublicacionInterface } from '../../models/PublicacionInterface';
+import { ViewChild } from '@angular/core';
 
 // SERVICIOS
 import { Publicacion } from '../../service/publicacion'; // Tu servicio de API
@@ -19,7 +20,10 @@ import { CreatePost } from '../create-post/create-post';
   styleUrl: './feed.css',
 })
 export class Feed implements OnInit { 
-  
+  @ViewChild('eventBar') eventBar!: EventBar;
+  recargarEventos() {
+    this.eventBar.cargarEventos();
+  }
   posts: PublicacionInterface[] = [];
   vistaActual: 'intereses' | 'todos' = 'intereses'; 
   misIntereses: number[] = [];

@@ -276,3 +276,68 @@
     font-weight: bold;
     cursor: pointer;
 }
+/* Fondo oscuro */
+.evento-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Tarjeta */
+.evento-modal-card {
+  background: #242526;
+  width: 90%;
+  max-width: 520px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  animation: popIn 0.25s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Imagen superior */
+.evento-modal-img {
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Contenido */
+.evento-modal-body {
+  padding: 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Cerrar */
+.btn-cerrar {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Texto */
+.evento-fecha,
+.evento-hora,
+.evento-lugar {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+.evento-descripcion {
+  margin-top: 10px;
+  color: #6b1460;
+  line-height: 1.4;
+}
