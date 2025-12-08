@@ -1,22 +1,61 @@
 <div class="perfil-wrapper">
   
   <div *ngIf="loading" class="loading-spinner">
-    Cargando perfil...
+    <h2>Cargando perfil...</h2>
   </div>
 
   <div *ngIf="!loading && usuario" class="card-perfil fade-in">
     <div class="card-header-bg"></div>
 
     <div class="card-content">
+      
       <div class="img-container">
-        <img [src]="avatarUrl" 
+        <img *ngIf="!editando" 
+             [src]="avatarUrl" 
              alt="Foto de perfil" 
              class="profile-pic"
              onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+
+        <div *ngIf="editando" class="img-edit-wrapper" (click)="fileInput.click()">
+          <img [src]="previewUrl || avatarUrl" class="profile-pic edit-mode">
+          <div class="overlay-icon">📷</div>
+          <input #fileInput type="file" (change)="onFileSelected($event)" style="display: none" accept="image/*">
+        </div>
       </div>
 
       <div class="text-center mt-3">
-        <h2 class="user-name">{{ usuario.nombre }}</h2>
+        
+        <div *ngIf="!editando">
+            <h2 class="user-name">{{ usuario.nombre }}</h2>
+        </div>
+
+        <div *ngIf="editando" class="edit-field-container">
+            
+            <label class="edit-label">Nombre:</label>
+            <input type="text" [(ngModel)]="usuarioEdit.nombre" class="form-control-dark" placeholder="Tu nombre">
+            
+            <div *ngIf="!usuario.esGoogle" class="password-section">
+                <p class="section-title">Cambiar Contraseña</p>
+
+                <div class="mb-2">
+                    <label class="edit-label">Contraseña Actual:</label>
+                    <input type="password" 
+                           [(ngModel)]="passwordActual" 
+                           class="form-control-dark" 
+                           placeholder="Requerida para guardar cambios">
+                </div>
+
+                <div>
+                    <label class="edit-label">Nueva Contraseña:</label>
+                    <input type="password" 
+                           [(ngModel)]="passwordNueva" 
+                           class="form-control-dark" 
+                           placeholder="Opcional: Dejar vacío si no cambia">
+                </div>
+            </div>
+
+        </div>
+
         <span class="badge-rol" [ngClass]="{
           'rol-alumno': usuario.rol === 'alumno',
           'rol-admin': usuario.rol === 'admin' || usuario.rol === 'maestro'
@@ -25,14 +64,32 @@
 
       <hr class="divider">
 
-      <div class="details-list">
+      <div class="action-buttons" *ngIf="!editando">
+        <button class="btn-action btn-edit" (click)="activarEdicion()">
+           ✏️ Editar Perfil
+        </button>
+        <button class="btn-action btn-delete" (click)="eliminarCuenta()">
+           🗑️ Eliminar Cuenta
+        </button>
+      </div>
+
+      <div class="action-buttons" *ngIf="editando">
+        <button class="btn-action btn-save" (click)="guardarCambios()">
+           💾 Guardar
+        </button>
+        <button class="btn-action btn-cancel" (click)="cancelarEdicion()">
+           ❌ Cancelar
+        </button>
+      </div>
+
+      <div class="details-list mt-4">
         
         <div class="detail-item">
           <div class="icon">✉️</div>
           <div class="info">
             <small>Correo Electrónico</small>
             <p>{{ usuario.correo }} 
-              <span *ngIf="usuario.correoValidado" class="check-verified" title="Correo validado">✔</span>
+              <span *ngIf="usuario.correoValidado" class="check-verified" title="Verificado">✔</span>
             </p>
           </div>
         </div>
@@ -51,7 +108,6 @@
             <small>Tipo de Acceso</small>
             <p>
               {{ usuario.esGoogle ? 'Google Account' : 'Credenciales UAA' }}
-              <span *ngIf="usuario.admin" class="text-danger fw-bold">(Administrador)</span>
             </p>
           </div>
         </div>
@@ -62,25 +118,23 @@
   </div>
 
   <div class="muro-container fade-in" *ngIf="usuario">
-    
     <h3 class="muro-titulo">Publicaciones</h3>
     
-    <div *ngIf="loadingPosts" class="text-center py-3">
-      Cargando actividad...
+    <div *ngIf="loadingPosts" class="text-center py-3" style="color:white;">
+        Cargando actividad...
     </div>
-
+    
     <div *ngIf="!loadingPosts && misPublicaciones.length > 0; else noPosts">
       <div class="post-wrapper" *ngFor="let post of misPublicaciones">
         <app-post-card [post]="post"></app-post-card>
       </div>
     </div>
-
+    
     <ng-template #noPosts>
       <div class="empty-state" *ngIf="!loadingPosts">
         <p>Aún no has realizado ninguna publicación.</p>
       </div>
     </ng-template>
-
   </div>
 
   <div *ngIf="!loading && !usuario" class="alert-error">

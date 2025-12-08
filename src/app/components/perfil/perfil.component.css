@@ -2,34 +2,36 @@
    TEMA OSCURO - PERFIL
    ========================================= */
 
-/* Contenedor Principal (Ya estaba oscuro, se mantiene) */
+/* Contenedor Principal */
 .perfil-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 85vh;
-  background-color: #1c1e21; /* Fondo principal oscuro */
-  padding: 20px;
-  /* Ajustes para el muro debajo */
-  flex-direction: column; 
-  gap: 30px;
-  padding-bottom: 50px;
+  flex-direction: column; /* Uno debajo del otro */
+  align-items: center;    /* Centrados horizontalmente */
+  
+  /* CAMBIO CLAVE: En lugar de 'center', usamos 'flex-start' para que empiece arriba
+     y no se amontone si la tarjeta crece */
+  justify-content: flex-start; 
+  
+  min-height: 100vh;      /* Ocupa toda la pantalla */
+  background-color: #1c1e21; 
+  padding-top: 40px;      /* Espacio superior para que no pegue con el navbar */
+  padding-bottom: 60px;   /* Espacio inferior para scroll */
+  gap: 40px;              /* Espacio GRANDE entre la tarjeta y las publicaciones */
 }
 
 /* --- Tarjeta Principal --- */
 .card-perfil {
-  /* CAMBIO: Fondo oscuro para la tarjeta */
   background: #2a2d32; 
   width: 100%;
-  max-width: 400px;
+  max-width: 450px; /* Un poco más ancho para que quepan bien los inputs */
   border-radius: 16px;
-  /* Sombra más suave para fondo oscuro */
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3); 
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4); 
   overflow: hidden;
   position: relative;
-  transition: transform 0.3s ease;
-  /* Opcional: un borde sutil para separarlo del fondo */
   border: 1px solid #3f4248;
+  /* Asegura que la tarjeta no se encime con nada */
+  z-index: 10; 
+  transition: transform 0.3s ease;
 }
 
 .card-perfil:hover {
@@ -39,7 +41,6 @@
 /* --- Fondo decorativo superior --- */
 .card-header-bg {
   height: 120px;
-  /* CAMBIO: Gradiente Morado en lugar de azul */
   background: linear-gradient(135deg, #6a1b9a, #ab47bc);
 }
 
@@ -53,25 +54,24 @@
 .img-container {
   display: flex;
   justify-content: center;
+  position: relative; /* Importante para el z-index */
 }
 
 .profile-pic {
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
-  /* CAMBIO: El borde debe coincidir con el color de fondo de la tarjeta (#2a2d32) */
-  border: 5px solid #2a2d32;
+  border: 5px solid #2a2d32; /* Coincide con el fondo de la card */
   object-fit: cover;
   background-color: #ddd;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 /* --- Tipografía General --- */
 .user-name {
-  margin: 10px 0 5px;
-  font-size: 1.5rem;
+  margin: 15px 0 5px;
+  font-size: 1.6rem;
   font-weight: 700;
-  /* CAMBIO: Texto blanco */
   color: #ffffff;
 }
 
@@ -82,85 +82,26 @@
   border-radius: 20px;
   font-weight: 600;
   letter-spacing: 0.5px;
+  
+  /* CAMBIO: Color blanco por defecto para "INVITADO" */
+  color: #ffffff; 
+  background-color: #4e5055; /* Un gris neutro para roles sin color específico */
 }
 
-/* CAMBIO: Ajustar colores de los roles para fondo oscuro */
-.rol-alumno {
-  /* Morado claro para alumno */
-  background-color: #7b1fa2;
-  color: #ffffff;
-}
-
-.rol-admin {
-  /* Rosa/Rojo para admin */
-  background-color: #c2185b;
-  color: #ffffff;
-}
+.rol-alumno { background-color: #7b1fa2; color: #ffffff; }
+.rol-admin { background-color: #c2185b; color: #ffffff; }
 
 /* --- Divisor --- */
 .divider {
-  margin: 20px 0;
+  margin: 25px 0;
   border: 0;
-  /* CAMBIO: Divisor más oscuro y sutil */
   border-top: 1px solid #44474d;
 }
 
-/* Lista de Detalles */
-.details-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.detail-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-/* --- Iconos de detalles --- */
-.icon {
-  font-size: 1.2rem;
-  /* CAMBIO: Fondo del icono más oscuro */
-  background-color: #3a3d42;
-  padding: 8px;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* --- Textos de información --- */
-.info small {
-  display: block;
-  /* CAMBIO: Color de título pequeño más claro (gris claro) */
-  color: #b0b0b0;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-
-.info p {
-  margin: 0;
-  font-size: 0.95rem;
-  /* CAMBIO: Color del dato principal (casi blanco) */
-  color: #e0e0e0;
-  font-weight: 500;
-}
-
-.check-verified {
-  color: #28a745; /* El verde sigue viéndose bien */
-  margin-left: 5px;
-}
-
-/* --- Ajustes adicionales para la sección del muro (fuera de la card) --- */
-
-/* Contenedor del Muro */
+/* --- Muro / Publicaciones --- */
 .muro-container {
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; /* Las publicaciones pueden ser más anchas que el perfil */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -168,13 +109,11 @@
 
 .muro-titulo {
   font-size: 1.4rem;
-  /* CAMBIO: Título claro */
   color: #e0e0e0;
   font-weight: 700;
-  margin-bottom: 10px;
-  /* CAMBIO: Borde morado */
+  margin-bottom: 5px;
   border-left: 5px solid #9c27b0;
-  padding-left: 10px;
+  padding-left: 15px;
 }
 
 .post-wrapper {
@@ -183,38 +122,155 @@
 
 /* Estado Vacío */
 .empty-state {
-  /* CAMBIO: Fondo oscuro para estado vacío */
   background-color: #2a2d32;
-  padding: 30px;
+  padding: 40px;
   border-radius: 12px;
   text-align: center;
-  /* CAMBIO: Texto claro */
   color: #b0b0b0;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   border: 1px solid #3f4248;
 }
 
-/* Utilidades */
-.text-danger { color: #ff5252; } /* Rojo más brillante para fondo oscuro */
-.fw-bold { font-weight: bold; }
-
-/* Animación de entrada (se mantiene igual) */
-.fade-in {
-  animation: fadeIn 0.6s ease-out;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Loading text */
-.loading-spinner, .alert-error {
-    color: white;
-    text-align: center;
-}
-
-@media (max-width: 768px) {
-  .muro-container {
+/* --- INPUTS Y EDICIÓN --- */
+.edit-field-container {
+    margin-bottom: 15px;
+    padding: 0 5px;
     width: 100%;
-  }
 }
+
+.edit-label {
+    display: block;
+    text-align: left;
+    font-size: 0.85rem;
+    color: #b0b0b0;
+    margin-bottom: 6px;
+    margin-left: 2px;
+}
+
+.form-control-dark {
+  background-color: #1f2125; /* Un poco más oscuro que la tarjeta */
+  border: 1px solid #555;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 8px;
+  width: 100%;
+  text-align: center; /* Opcional: si prefieres alineado a la izquierda quita esto */
+  font-size: 1rem;
+  font-weight: 500;
+  transition: border-color 0.2s;
+}
+
+.form-control-dark:focus {
+  outline: none;
+  border-color: #ab47bc;
+  background-color: #181a1d;
+}
+
+/* Sección de Password */
+.password-section {
+    background-color: rgba(0, 0, 0, 0.2); /* Fondo sutil para separar */
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    margin-top: 20px;
+}
+
+.divider-subtle {
+    border-top: 1px solid #555;
+    margin: 10px 0 15px 0;
+    opacity: 0.5;
+}
+
+.section-title {
+    font-size: 0.95rem;
+    color: #ce93d8; /* Morado pastel */
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.mb-2 { margin-bottom: 15px; }
+
+/* --- Botones --- */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-action {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, filter 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-action:active { transform: scale(0.98); }
+
+.btn-edit { background-color: #3b82f6; color: white; }
+.btn-edit:hover { background-color: #2563eb; }
+
+.btn-delete { background-color: #ef4444; color: white; }
+.btn-delete:hover { background-color: #dc2626; }
+
+.btn-save { background-color: #10b981; color: white; }
+.btn-save:hover { background-color: #059669; }
+
+.btn-cancel { background-color: #6b7280; color: white; }
+.btn-cancel:hover { background-color: #4b5563; }
+
+/* Iconos y Detalles */
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 5px 0;
+}
+
+.icon {
+  font-size: 1.2rem;
+  background-color: #3a3d42;
+  padding: 8px;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info p { color: #e0e0e0; margin: 0; font-weight: 500; }
+.info small { color: #888; display: block; margin-bottom: 2px; }
+
+/* Edición de Foto */
+.img-edit-wrapper {
+  position: relative;
+  cursor: pointer;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 5px solid #2a2d32;
+}
+.profile-pic.edit-mode { opacity: 0.5; width: 100%; height: 100%; border:none; }
+.overlay-icon {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem; color: white;
+  pointer-events: none;
+}
+
+/* Loading */
+.loading-spinner, .alert-error { color: white; text-align: center; margin-top: 50px; }
+.fade-in { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
