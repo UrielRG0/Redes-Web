@@ -1,7 +1,7 @@
 <div class="create-post-card">
     <div class="input-trigger-row">
         <img [src]="avatarUrl" class="user-avatar">
-        <div class="fake-input" (click)="abrirModal()">
+        <div class="fake-input" (click)="abrirModalPost()">
             ¿Qué estás pensando, {{ usuario.nombre }}?
         </div>
     </div>
@@ -9,21 +9,21 @@
     <div class="divider"></div>
 
     <div class="actions-row">
-        <button class="action-btn" (click)="abrirModal()">
-            <span style="color: #45bd62; font-size: 20px;"></span> Foto/Video
+        <button class="action-btn" (click)="abrirModalPost()">
+            <span style="color: #45bd62; font-size: 20px;"></span> Publicación
         </button>
-        <button class="action-btn" (click)="abrirModal()">
-            <span style="color:#f7b928; font-size: 20px;"></span> Sentimiento
+        
+        <button class="action-btn" (click)="abrirModalEvento()">
+            <span style="color:#f7b928; font-size: 20px;"></span> Crear Evento
         </button>
     </div>
 </div>
 
-<div class="modal-overlay" *ngIf="mostrarModal">
+<div class="modal-overlay" *ngIf="mostrarModalPost">
     <div class="modal-card scale-in">
-        
         <div class="modal-header">
             <h3>Crear publicación</h3>
-            <button class="close-btn" (click)="cerrarModal()">x</button>
+            <button class="close-btn" (click)="cerrarModalPost()">x</button>
         </div>
 
         <div class="modal-body">
@@ -32,18 +32,21 @@
                 <span class="fw-bold">{{ usuario.nombre }}</span>
             </div>
 
-            <textarea style=" background:#242526;"
+            <textarea style="background:#242526; color: white; border: none;"
                 [(ngModel)]="tituloPublicacion" 
-                placeholder="Que Quieres Promocionar?" 
-                rows="1"></textarea>
+                placeholder="¿Qué quieres promocionar?" 
+                rows="1" class="form-control mb-2"></textarea>
+            
             <div class="divider"></div>
-             <textarea style=" background:#242526;"
+            
+            <textarea style="background:#242526; color: white; border: none;"
                 [(ngModel)]="textoPublicacion" 
-                placeholder="Cuentame mas..." 
-                rows="4"></textarea>
+                placeholder="Cuéntame más..." 
+                rows="4" class="form-control"></textarea>
+
             <div class="img-preview-container" *ngIf="previewImagen">
                 <img [src]="previewImagen">
-                <button class="remove-img" (click)="previewImagen=null; archivoSeleccionado=null"></button>
+                <button class="remove-img" (click)="previewImagen=null; archivoSeleccionado=null">x</button>
             </div>
 
             <div class="tags-section">
@@ -57,6 +60,7 @@
                     </button>
                 </div>
             </div>
+
             <div class="event-selection mb-3">
                 <select #selectEvento 
                         [(ngModel)]="idEventoSeleccionado" 
@@ -67,10 +71,11 @@
                     </option>
                 </select>
             </div>
+
             <div class="add-extras">
-                <span>Agregar a tu publicación:</span>
-                <label class="icon-btn" title="Foto"><img src="src.png" alt="">
-                     <input type="file" hidden (change)="onFileSelected($event)" accept="image/*">
+                <span>Agregar:</span>
+                <label class="icon-btn" title="Foto" style="cursor: pointer;">
+                     📷 <input type="file" hidden (change)="onFileSelected($event)" accept="image/*">
                 </label>
             </div>
         </div>
@@ -82,6 +87,78 @@
                 {{ isLoading ? 'Publicando...' : 'Publicar' }}
             </button>
         </div>
+    </div>
+</div>
 
+<div class="modal-overlay" *ngIf="mostrarModalEvento">
+    <div class="modal-card scale-in">
+        <div class="modal-header">
+            <h3>Nuevo Evento</h3>
+            <button class="close-btn" (click)="cerrarModalEvento()">x</button>
+        </div>
+
+        <div class="modal-body" style="color: white;">
+            <div class="user-info mb-3">
+                <img [src]="avatarUrl" class="user-avatar-small">
+                <span class="fw-bold">{{ usuario.nombre }}</span>
+            </div>
+
+            <input type="text" [(ngModel)]="nuevoEvento.titulo" 
+                   placeholder="Nombre del Evento" 
+                   class="form-control mb-3" 
+                   style="background:#242526; color: white; border:none; font-weight: bold;">
+
+            <textarea [(ngModel)]="nuevoEvento.descripcion" 
+                      placeholder="Descripción del evento..." 
+                      rows="3" 
+                      class="form-control mb-3" 
+                      style="background:#242526; color: white; border:none;"></textarea>
+
+            <input type="text" [(ngModel)]="nuevoEvento.lugar" 
+                   placeholder="📍 Lugar / Ubicación" 
+                   class="form-control mb-3" 
+                   style="background:#242526; color: white; border:none;">
+
+            <div class="divider"></div>
+            <label class="small text-muted mb-2">Fechas y Horarios:</label>
+
+            <div class="row g-2 mb-2">
+                <div class="col-6">
+                    <input type="date" [(ngModel)]="nuevoEvento.fechaInicio" class="form-control" style="background:#242526; color: white; border:none;">
+                </div>
+                <div class="col-6">
+                    <input type="date" [(ngModel)]="nuevoEvento.fechaFin" class="form-control" style="background:#242526; color: white; border:none;">
+                </div>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-6">
+                    <input type="time" [(ngModel)]="nuevoEvento.horaInicio" class="form-control" style="background:#242526; color: white; border:none;">
+                </div>
+                <div class="col-6">
+                    <input type="time" [(ngModel)]="nuevoEvento.horaFin" class="form-control" style="background:#242526; color: white; border:none;">
+                </div>
+            </div>
+
+            <div class="add-extras">
+                <span>Portada del Evento:</span>
+                <label class="icon-btn" title="Foto" style="cursor: pointer;">
+                     📷 <input type="file" hidden (change)="onFileEventoSelected($event)" accept="image/*">
+                </label>
+            </div>
+            <div class="img-preview-container mt-2" *ngIf="previewEvento">
+                <img [src]="previewEvento">
+                <button class="remove-img" (click)="previewEvento=null; archivoEvento=null">x</button>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-post" 
+                    style="background-color: #9d4977;" 
+                    [disabled]="!nuevoEvento.titulo || isLoading"
+                    (click)="crearEvento()">
+                {{ isLoading ? 'Creando...' : 'Crear Evento' }}
+            </button>
+        </div>
     </div>
 </div>

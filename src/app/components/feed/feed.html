@@ -1,20 +1,90 @@
 
-<div
-  class="feed-containter body"
-  #scrollable
-  infiniteScroll
-  [infiniteScrollDistance]="2"
-  [infiniteScrollThrottle]="150"
-  (scrolled)="loadMorePosts()" 
-> 
-    <app-create-post (postCreado)="cargarFeed()"></app-create-post>  
-  <app-event-bar></app-event-bar> 
-  <app-post-card
-      *ngFor="let post of posts" 
-      [post]="post"
-  >
-  </app-post-card>
+<div class="container-fluid main-container">
+  <div class="row justify-content-center">
+    
+    <div class="col-lg-3 d-none d-lg-block">
+        <div class="sidebar-sticky">
+            
+            <div class="side-card user-card">
+                <div class="card-bg"></div>
+                <div class="user-content">
+                    
+                    <img [src]="avatarUrl" 
+                        class="side-avatar" 
+                        alt="Perfil"
+                        (error)="avatarUrl='assets/person.png'"> <h5 class="mt-2 mb-0">{{ usuario.nombre || 'Usuario' }}</h5>
+                    <small class="text-secondary">Alumno UAA</small>
+                </div>
+            </div>
 
-  <div *ngIf="isLoading" style="text-align: center;">Cargando más...</div>
+            <div class="side-menu mt-3">
+                <a class="menu-item active"><span class="icon">🏠</span> Inicio</a>
+                <a class="menu-item"><span class="icon">📅</span> Mis Eventos</a>
+                <a class="menu-item"><span class="icon">🔖</span> Guardados</a>
+            </div>
 
+            <div class="side-card mt-3 p-3">
+                <h6 class="text-muted small fw-bold">ACCESOS RÁPIDOS</h6>
+                <ul class="list-unstyled mt-2">
+                    <li class="mb-2"><a href="https://aula.uaa.mx" target="_blank" class="uaa-link">🎓 e-Aula</a></li>
+                    <li><a href="https://esiima.uaa.mx" target="_blank" class="uaa-link">📋 Esiima</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6 col-xl-5">
+        
+        <div class="feed-container body"
+             infiniteScroll
+             [infiniteScrollDistance]="2"
+             [infiniteScrollThrottle]="150"
+             (scrolled)="loadMorePosts()">
+
+            <app-event-bar></app-event-bar>
+
+            <app-create-post 
+                (postCreado)="cargarFeed()" 
+                (eventoCreado)="cargarEventos()"> </app-create-post>
+            
+            <app-post-card
+                *ngFor="let post of posts" 
+                [post]="post">
+            </app-post-card>
+
+            <div *ngIf="isLoading" class="text-center py-3 text-muted">
+                <small>Cargando más...</small>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-3 d-none d-lg-block">
+        <div class="sidebar-sticky">
+            
+            <div class="side-card p-3">
+                <h5 class="card-title text-secondary fw-bold fs-6">Tendencias en UAA</h5>
+                
+                <div class="trend-item mb-3">
+                    <small class="text-secondary d-block">Tendencia · Eventos</small>
+                    <span class="fw-bold">#FeriaUAA</span>
+                    <small class="text-secondary d-block">2.5k posts</small>
+                </div>
+
+                <div class="trend-item mb-3">
+                    <small class="text-secondary d-block">Tendencia · Deportes</small>
+                    <span class="fw-bold">#GallosFutbol</span>
+                </div>
+
+                <button class="btn btn-link btn-sm p-0" style="color:#9d4977">Ver más</button>
+            </div>
+
+            <div class="mt-4 text-center">
+                <small class="text-secondary">© 2025 SocialNet UAA</small>
+            </div>
+
+        </div>
+    </div>
+
+  </div>
 </div>

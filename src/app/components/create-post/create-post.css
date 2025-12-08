@@ -180,3 +180,48 @@ textarea {
     background-color: #242526;
     padding: 5px 0;
 }
+/* ========================================== */
+/* CORRECCIÓN DE MODO OSCURO (TEXTO INVISIBLE) */
+/* ========================================== */
+
+/* 1. Asegurar que todo el texto dentro del modal sea blanco por defecto */
+.modal-body, .modal-header, label {
+    color: #e4e6eb !important;
+}
+
+/* 2. Estilar los Inputs y Textareas (Sobrescribir Bootstrap) */
+.form-control, .form-select {
+    background-color: #3a3b3c !important; /* Gris oscuro (más claro que el fondo) */
+    color: #ffffff !important;            /* Texto BLANCO */
+    border: 1px solid #3e4042 !important; /* Borde sutil */
+}
+
+/* 3. Estilar el texto de ayuda (Placeholder) */
+.form-control::placeholder {
+    color: #b0b3b8 !important; /* Gris claro */
+    opacity: 1;
+}
+
+/* 4. Cuando el usuario hace clic en el input (Focus) */
+.form-control:focus, .form-select:focus {
+    background-color: #3a3b3c !important;
+    color: #ffffff !important;
+    border-color: #9d4977 !important; /* Tu color morado/dorado al escribir */
+    box-shadow: 0 0 0 2px rgba(157, 73, 119, 0.25) !important;
+}
+
+/* 5. ARREGLAR LOS CALENDARIOS (Date/Time) */
+/* Esto le dice al navegador que renderice el calendario en modo oscuro */
+input[type="date"], input[type="time"], input[type="datetime-local"] {
+    color-scheme: dark; 
+}
+
+/* 6. Arreglar el input del título para que resalte más */
+input.fw-bold {
+    font-size: 1.1rem;
+    background-color: transparent !important; /* Que parezca título, no input */
+    border: none !important;
+    border-bottom: 1px solid #3e4042 !important;
+    border-radius: 0 !important;
+    padding-left: 0 !important;
+}

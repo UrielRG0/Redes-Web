@@ -17,10 +17,12 @@ import { EventoService } from '../../service/evento';
 export class CreatePost implements OnInit {
 
   @Output() postCreado = new EventEmitter<void>(); // Para avisar al Feed
+  @Output() eventoCreado = new EventEmitter<void>();
   @ViewChild('selectEvento') selectEvento!: ElementRef;
   usuario: any = {};
   avatarUrl: string = 'assets/person.png';
-  mostrarModal: boolean = false;
+  mostrarModalPost: boolean = false;
+  mostrarModalEvento:boolean=false;
   isLoading: boolean = false;
 
   // Datos del Formulario
@@ -34,6 +36,17 @@ export class CreatePost implements OnInit {
   interesesSeleccionados: number[] = [];
   listaEventos: any[] = [];
   idEventoSeleccionado: number | null = null;
+  archivoEvento: File | null = null;
+  previewEvento: string | null = null;
+  nuevoEvento = {
+      titulo: '',
+      descripcion: '',
+      lugar: '',
+      fechaInicio: '',
+      fechaFin: '',
+      horaInicio: '',
+      horaFin: ''
+  };
 
   private API_USER_FOTOS = 'https://172.25.124.29:8443/socialNetUAA/api/usuarios/fotos';
 
@@ -76,14 +89,13 @@ export class CreatePost implements OnInit {
     });
   }
 
-  // --- MODAL ---
-  abrirModal() { this.mostrarModal = true; }
-  cerrarModal() { 
-      this.mostrarModal = false; 
-      this.limpiarFormulario();
+  abrirModalPost() { this.mostrarModalPost = true; }
+  
+  cerrarModalPost() { 
+      this.mostrarModalPost = false; 
+      this.limpiarFormularioPost();
   }
 
-  // --- SELECCIÓN DE IMAGEN ---
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -94,7 +106,6 @@ export class CreatePost implements OnInit {
     }
   }
 
-  // --- SELECCIÓN DE INTERESES ---
   toggleInteres(id: number) {
     if (this.interesesSeleccionados.includes(id)) {
         this.interesesSeleccionados = this.interesesSeleccionados.filter(x => x !== id);
@@ -102,58 +113,107 @@ export class CreatePost implements OnInit {
         this.interesesSeleccionados.push(id);
     }
   }
-  focusEvento() {
-    // Esto hace que el navegador haga scroll y ponga el cursor en el select
-    if (this.selectEvento) {
-        this.selectEvento.nativeElement.focus();
-        // Opcional: Intenta abrirlo (funciona en algunos navegadores)
-        this.selectEvento.nativeElement.click(); 
-    }
-  }
+
   publicar() {
-    if (!this.textoPublicacion && !this.archivoSeleccionado) {
-        return; 
-    }
+    if (!this.textoPublicacion && !this.archivoSeleccionado) return;
 
     this.isLoading = true;
     const formData = new FormData();
+    formData.append('titulo', this.tituloPublicacion);
     formData.append('description', this.textoPublicacion);
-    formData.append('titulo',this.tituloPublicacion)
     formData.append('idAutor', this.usuario.idUsuario);
     
-    // Intereses
-    this.interesesSeleccionados.forEach(id => {
-        formData.append('intereses', id.toString());
-    });
+    this.interesesSeleccionados.forEach(id => formData.append('intereses', id.toString()));
 
-    // --- 4. AGREGAR EVENTO SI SE SELECCIONÓ ---
     if (this.idEventoSeleccionado) {
         formData.append('idEvento', this.idEventoSeleccionado.toString());
     }
-    // ------------------------------------------
-
     if (this.archivoSeleccionado) {
         formData.append('imagen', this.archivoSeleccionado);
     }
+
     this.pubService.crear(formData).subscribe({
         next: () => {
             this.isLoading = false;
-            this.postCreado.emit(); // ¡Avisamos al Feed!
-            this.cerrarModal();
+            this.postCreado.emit();
+            this.cerrarModalPost();
         },
         error: (e) => {
-            console.error(e);
             this.isLoading = false;
             alert("Error al publicar");
         }
     });
   }
 
-  limpiarFormulario() {
+  limpiarFormularioPost() {
+      this.tituloPublicacion = '';
       this.textoPublicacion = '';
       this.archivoSeleccionado = null;
       this.previewImagen = null;
       this.interesesSeleccionados = [];
       this.idEventoSeleccionado = null;
+  }
+
+  // ==========================================
+  // 2. LÓGICA MODAL EVENTO (NUEVO)
+  // ==========================================
+  abrirModalEvento() { this.mostrarModalEvento = true; }
+  
+  cerrarModalEvento() { 
+      this.mostrarModalEvento = false; 
+      this.limpiarFormularioEvento();
+  }
+
+  onFileEventoSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+        this.archivoEvento = file;
+        const reader = new FileReader();
+        reader.onload = () => { this.previewEvento = reader.result as string; };
+        reader.readAsDataURL(file);
+    }
+  }
+
+  crearEvento() {
+      // Validaciones simples
+      if (!this.nuevoEvento.titulo || !this.nuevoEvento.fechaInicio) {
+          alert("Faltan datos del evento");
+          return;
+      }
+
+      this.isLoading = true;
+      const formData = new FormData();
+      formData.append('titulo', this.nuevoEvento.titulo);
+      formData.append('descripcion', this.nuevoEvento.descripcion);
+      formData.append('lugar', this.nuevoEvento.lugar);
+      formData.append('fechaInicio', this.nuevoEvento.fechaInicio);
+      formData.append('fechaFin', this.nuevoEvento.fechaFin);
+      formData.append('horaInicio', this.nuevoEvento.horaInicio);
+      formData.append('horaFin', this.nuevoEvento.horaFin);
+      formData.append('idCreador', this.usuario.idUsuario);
+
+      if (this.archivoEvento) {
+          formData.append('imagenes', this.archivoEvento);
+      }
+
+      this.eventoService.crear(formData).subscribe({
+          next: () => {
+              this.isLoading = false;
+              alert("Evento Creado");
+              this.eventoCreado.emit(); // Avisar para recargar barra de eventos
+              this.cargarEventos(); // Recargar lista local
+              this.cerrarModalEvento();
+          },
+          error: (e) => {
+              this.isLoading = false;
+              alert("Error al crear evento");
+          }
+      });
+  }
+
+  limpiarFormularioEvento() {
+      this.nuevoEvento = { titulo: '', descripcion: '', lugar: '', fechaInicio: '', fechaFin: '', horaInicio: '', horaFin: '' };
+      this.archivoEvento = null;
+      this.previewEvento = null;
   }
 }

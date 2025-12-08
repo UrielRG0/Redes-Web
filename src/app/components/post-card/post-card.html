@@ -1,25 +1,18 @@
 <div class="post-card">
+    
     <div class="post-header">
         <img class="avatar" [src]="avatarUrl" alt="Avatar">
-        
         <div class="userInfo">
             <h4 class="author-name">
                 {{ nombreAutor }}
-                
                 <span *ngIf="nombreEvento" class="event-connection">
                     <span class="separator">▶</span> 
                     <span class="event-name">{{ nombreEvento }}</span>
-                    
-                    <span *ngIf="esEventoVerificado" 
-                          class="verified-badge" 
-                          title="Evento Oficial UAA">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16">
-                            <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.896.011a2.89 2.89 0 0 0-2.924 2.924l.01.896-.636.622a2.89 2.89 0 0 0 0 4.134l.638.622-.011.896a2.89 2.89 0 0 0 2.924 2.924l.896-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.638.896-.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.896.636-.622a2.89 2.89 0 0 0 0-4.134l-.638-.622.011-.896a2.89 2.89 0 0 0-2.924-2.924l-.896.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>
-                          </svg>
+                    <span *ngIf="esEventoVerificado" class="verified-badge" title="Evento Oficial">
+                          ☑
                     </span>
                 </span>
             </h4>
-
             <div class="post-meta">
                 <small>{{ post.createdAt | date: 'mediumDate' }}</small>
                 <span class="dot">·</span>
@@ -30,26 +23,81 @@
 
     <div class="post-body">
         <h5 class="post-title">{{post.titulo}}</h5>
-        
         <p class="post-text">
             {{ post.description }}
-            
             <span class="hashtags-container" *ngIf="nombresIntereses.length > 0">
-                <br><br> <span class="hashtag" *ngFor="let tag of nombresIntereses">
-                    #{{ tag }}
-                </span>
+                <br><br> <span class="hashtag" *ngFor="let tag of nombresIntereses">#{{ tag }}</span>
             </span>
         </p>
-        
         <div *ngIf="post.imagePaths && post.imagePaths.length > 0" class="media-container">
-            <img 
-                *ngFor="let img of post.imagePaths"
-                class="post-image"
-                [src]="getPostImageUrl(img)" 
-                alt="Imagen del post"
-            />
+            <img *ngFor="let img of post.imagePaths" class="post-image" [src]="getPostImageUrl(img)">
         </div>
     </div>
 
-    <div class="post-footer">...</div>
+    <div class="post-footer">
+        <div class="actions-row">
+            <button class="action-btn" (click)="toggleComentarios()">
+                <span>💬</span> Comentar
+            </button>
+        </div>
+    </div>
+    <div class="comments-section" *ngIf="mostrarComentarios">
+        <hr class="divider">
+        
+        <div class="comments-list">
+             <div *ngIf="comentariosEstructurados.length === 0" class="text-center text-muted my-3">
+                 <small>Sé el primero en comentar.</small>
+             </div>
+
+             <div class="comment-thread" *ngFor="let padre of comentariosEstructurados">
+                 <div class="comment-item parent">
+                    <img [src]="padre.fotoUsuarioUrl || 'assets/person.png'" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-bubble">
+                            <span class="comment-author">{{ padre.nombreUsuario }}</span>
+                            <p class="comment-text">{{ padre.descripcion }}</p>
+                        </div>
+                        <div class="comment-actions">
+                            <small>{{ padre.fechaComentario | date:'shortTime' }}</small>
+                            <button class="btn-reply" (click)="activarResponder(padre.idComentario)">Responder</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="replies-container" *ngIf="padre.respuestas && padre.respuestas.length > 0">
+                    <div class="comment-item reply" *ngFor="let hijo of padre.respuestas">
+                        <img [src]="hijo.fotoUsuarioUrl || 'assets/person.png'" class="comment-avatar small">
+                        <div class="comment-content">
+                            <div class="comment-bubble">
+                                <span class="comment-author">{{ hijo.nombreUsuario }}</span>
+                                <p class="comment-text">{{ hijo.descripcion }}</p>
+                            </div>
+                            <small class="text-muted ms-2">{{ hijo.fechaComentario | date:'shortTime' }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reply-input-box" *ngIf="idComentarioEnRespuesta === padre.idComentario">
+                    <img [src]="avatarUrl || 'assets/person.png'" class="reply-avatar">
+                    <div class="input-wrapper small-input">
+                        <input type="text" [(ngModel)]="textoRespuesta" 
+                               placeholder="Respondiendo..." 
+                               (keyup.enter)="enviarRespuesta(padre.idComentario)">
+                        <button class="send-btn" (click)="enviarRespuesta(padre.idComentario)">➤</button>
+                    </div>
+                </div>
+             </div>
+        </div>
+
+        <div class="write-comment mt-3">
+             <img [src]="avatarUrl || 'assets/person.png'" class="write-avatar">
+             <div class="input-wrapper">
+                 <input type="text" placeholder="Escribe un comentario..." 
+                        [(ngModel)]="nuevoComentarioTexto"
+                        (keyup.enter)="enviarComentario()">
+                 <button class="send-btn" (click)="enviarComentario()">➤</button>
+             </div>
+        </div>
+
+    </div>
 </div>

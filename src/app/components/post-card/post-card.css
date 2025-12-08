@@ -100,8 +100,6 @@
     height: auto;
     max-height: 600px; /* Evitar imágenes eternas */
     object-fit: cover; /* Recorte inteligente */
-    border-top: 3px solid #6b1460;
-    border-bottom: 3px solid #6b1460;
 }
 
 /* --- FOOTER --- */
@@ -164,4 +162,236 @@
     text-decoration: underline;
     background-color: rgba(24, 119, 242, 0.1); /* Fondo azul muy sutil */
     border-radius: 2px;
+}
+/* Botones de acción (Like, Comentar) */
+.actions-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px 0;
+    border-top: 1px solid #e4e6eb;
+}
+
+.action-btn {
+    background: none; border: none;
+    padding: 8px 12px; border-radius: 6px;
+    color: #65676b; font-weight: 600; cursor: pointer;
+    flex: 1; /* Ocupan espacio igual */
+}
+.action-btn:hover { background-color: #f0f2f5; }
+/* --- SECCIÓN PRINCIPAL --- */
+.comments-section {
+    background-color: #242526; /* Fondo base modo oscuro */
+    padding: 10px 15px;
+    border-top: 1px solid #3e4042;
+}
+
+/* --- LISTA DE COMENTARIOS --- */
+.comments-list {
+    margin-top: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px; /* Espacio para el scroll */
+}
+
+/* Scrollbar personalizada para que se vea bien en oscuro */
+.comments-list::-webkit-scrollbar {
+    width: 6px;
+}
+.comments-list::-webkit-scrollbar-thumb {
+    background-color: #3e4042;
+    border-radius: 4px;
+}
+
+.comment-item {
+    display: flex;
+    gap: 12px; /* Más espacio entre foto y texto */
+    margin-bottom: 16px; /* Separación entre comentarios */
+    align-items: flex-start;
+}
+
+.comment-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #3e4042;
+    cursor: pointer;
+}
+
+/* --- BURBUJA DE COMENTARIO --- */
+.comment-content {
+    display: flex;
+    flex-direction: column;
+    max-width: 90%;
+}
+
+.comment-bubble {
+    /* GRIS SUAVE en lugar de morado, para mejor lectura */
+    background-color: #3a3b3c; 
+    padding: 10px 14px;
+    border-radius: 18px;
+    position: relative;
+    color: #e4e6eb; /* Texto blanco suave */
+}
+
+.comment-author {
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff; /* Nombre en blanco para resaltar */
+    display: block;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.comment-author:hover {
+    text-decoration: underline;
+}
+
+.comment-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #e4e6eb;
+    word-wrap: break-word;
+}
+
+/* --- FECHA / META --- */
+.comment-meta {
+    font-size: 11px;
+    color: #b0b3b8; /* Gris claro para información secundaria */
+    margin-top: 4px;
+    margin-left: 12px; /* Alineado con la burbuja */
+}
+
+/* --- INPUT PARA ESCRIBIR (MODERNIZADO) --- */
+.write-comment {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 10px;
+}
+
+.write-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.input-wrapper {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+    /* Gris oscuro en lugar de morado intenso */
+    background-color: #3a3b3c; 
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    padding: 10px 40px 10px 15px; /* Padding derecho para el botón enviar */
+    outline: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.input-wrapper input::placeholder {
+    color: #b0b3b8;
+}
+
+.input-wrapper input:focus {
+    background-color: #4e4f50; /* Un poco más claro al enfocar */
+    /* Aquí sí usamos el color de marca (morado/dorado) como detalle */
+    border-color: #9d4977; 
+}
+
+/* BOTÓN DE ENVIAR (AVIÓN) */
+.send-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #9d4977; /* Color de acento de tu app */
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.send-btn:hover {
+    transform: scale(1.1);
+    color: #ffc107; /* Amarillo UAA al pasar mouse */
+}
+/* Contenedor del hilo (Padre + Hijos) */
+.comment-thread {
+    margin-bottom: 15px;
+}
+
+/* Acciones debajo de la burbuja (Fecha - Responder) */
+.comment-actions {
+    margin-left: 12px;
+    margin-top: 2px;
+    font-size: 11px;
+    color: #b0b3b8;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-reply {
+    background: none;
+    border: none;
+    color: #b0b3b8;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    font-size: 11px;
+}
+.btn-reply:hover {
+    text-decoration: underline;
+    color: #e4e6eb;
+}
+
+/* --- ESTILOS DE RESPUESTAS (HIJOS) --- */
+.replies-container {
+    margin-left: 45px; /* SANGRÍA IMPORTANTE */
+    margin-top: 8px;
+    border-left: 2px solid #3e4042; /* Línea vertical opcional */
+    padding-left: 10px;
+}
+
+.comment-avatar.small {
+    width: 24px;
+    height: 24px;
+}
+
+/* --- INPUT DE RESPUESTA ESPECÍFICO --- */
+.reply-input-box {
+    margin-left: 45px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.2s;
+}
+
+.reply-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.input-wrapper.small-input input {
+    font-size: 13px;
+    padding: 6px 30px 6px 10px;
+    height: 30px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }

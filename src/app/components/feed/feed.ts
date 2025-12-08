@@ -21,7 +21,8 @@ import { CreatePost } from '../create-post/create-post';
 export class Feed implements OnInit { 
   
   posts: PublicacionInterface[] = [];
-  
+  vistaActual: 'intereses' | 'todos' = 'intereses'; 
+  misIntereses: number[] = [];
   // Variables de Estado
   currentPage: number = 1;
   isLoading: boolean = false;
@@ -40,9 +41,12 @@ export class Feed implements OnInit {
 
   ngOnInit() {
     const usuarioLogueado = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-    if (usuarioLogueado && usuarioLogueado.intereses && usuarioLogueado.intereses.length > 0) {
-        this.filtrosIntereses = usuarioLogueado.intereses;
+   if (usuarioLogueado && usuarioLogueado.intereses && usuarioLogueado.intereses.length > 0) {
+        this.misIntereses = usuarioLogueado.intereses;
     }
+
+    // 2. Por defecto, aplicamos el filtro de "Mis Intereses"
+    this.cambiarVista('intereses');
     this.cargarFeed();
     // 1. Nos suscribimos al Buscador del Navbar
     this.busquedaService.terminoBusqueda$.subscribe(termino => {
@@ -51,7 +55,18 @@ export class Feed implements OnInit {
         this.cargarFeed();
     });
   }
+  cambiarVista(tipo: 'intereses' | 'todos') {
+    this.vistaActual = tipo;
 
+    if (tipo === 'intereses') {
+        this.filtrosIntereses = [...this.misIntereses]; // Copia del array
+    } else {
+        this.filtrosIntereses = [];
+    }
+
+    // Recargamos el feed con la nueva configuración
+    this.cargarFeed();
+  }
   cargarFeed() {
     this.posts = []; 
     this.currentPage = 1;
