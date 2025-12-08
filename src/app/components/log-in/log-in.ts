@@ -144,7 +144,6 @@ cargarInteresesDelSistema() {
   // --- PASO 3: Enviar todos los datos (nombre, pass, foto) ---
   enviarRegistroFinal() {
     if (!this.datos.nombre || !this.datos.password) {
-      alert("Llena nombre y contraseña");
       return;
     }
 
@@ -175,9 +174,6 @@ cargarInteresesDelSistema() {
         // ------------------------------------------
 
         this.resetFormulario();
-        
-        // Opcional: Mostrar alerta o abrir login
-        alert("Tu cuenta ha sido creada. Por favor inicia sesión.");
       },
       error: (err) => {
         this.mensaje = 'Error al guardar: ' + err.message;
