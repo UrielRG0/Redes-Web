@@ -130,3 +130,149 @@
     line-height: 1.2;
     text-shadow: 0 1px 2px rgba(0,0,0,0.8);
 }
+/* Fondo oscuro que cubre toda la pantalla */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo negro semitransparente */
+    z-index: 2000; /* Por encima de todo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px); /* Efecto borroso de fondo */
+}
+
+/* La tarjeta central */
+.modal-card {
+    background-color: #242526; /* Gris oscuro (tema Facebook Dark) */
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh; /* Para que no se salga de pantallas chicas */
+}
+
+/* Animación de entrada */
+.scale-in {
+    animation: scaleIn 0.2s ease-out;
+}
+@keyframes scaleIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Botón cerrar */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.5);
+    border: none;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.close-btn:hover { background: rgba(0,0,0,0.8); }
+
+/* Imagen Cabecera */
+.modal-image-container {
+    width: 100%;
+    height: 200px;
+    position: relative;
+}
+.modal-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Badge de fecha flotante */
+.modal-date-badge {
+    position: absolute;
+    bottom: -15px;
+    right: 20px;
+    background: white;
+    padding: 5px 15px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    color: #000;
+}
+.modal-date-badge .day { font-size: 18px; font-weight: bold; color: #e41e3f; }
+.modal-date-badge .month { font-size: 12px; text-transform: uppercase; font-weight: bold; }
+
+/* Cuerpo del Modal */
+.modal-body {
+    padding: 25px 20px 15px;
+    color: #e4e6eb;
+    overflow-y: auto; /* Scroll si el texto es largo */
+}
+
+.modal-title {
+    margin: 0 0 15px 0;
+    font-size: 22px;
+    color: white;
+}
+
+.modal-info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: #b0b3b8;
+}
+
+.divider { border-color: #3e4042; margin: 15px 0; }
+
+.description-box h5 { color: white; margin-bottom: 5px; }
+.description-box p { 
+    color: #b0b3b8; 
+    font-size: 14px; 
+    line-height: 1.5; 
+    white-space: pre-wrap; /* Respeta saltos de línea */
+}
+
+/* Footer Botones */
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #3e4042;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    flex: 1;
+    background-color: #e41e3f; /* Rojo/Rosa UAA */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-share {
+    flex: 1;
+    background-color: #3a3b3c;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}

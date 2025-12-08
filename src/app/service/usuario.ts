@@ -11,10 +11,12 @@ export class Usuario {
   constructor(private http: HttpClient) { }
 
 
-  iniciarRegistro(correo: string) {
+  iniciarRegistro(correo: string,token:string) {
     const body = new URLSearchParams();
     body.set('correo', correo);
-    
+   if (token) {
+        body.set('captchaToken', token); 
+    }
     return this.http.post(`${this.baseUrl}/iniciar-registro`, body.toString(), {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
       responseType: 'text' // <--- AGREGA ESTA LÍNEA

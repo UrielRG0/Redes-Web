@@ -95,7 +95,13 @@
         <div *ngIf="paso === 1">
           <p class="fw-bold">Ingresa tu Correo Universitario:</p>
           <input [(ngModel)]="datos.correo" type="email" class="form-control" placeholder="al000000@edu.uaa.mx">
-          
+          <div class="d-flex justify-content-center my-3">
+              <ngx-turnstile 
+                  [siteKey]="siteKey" 
+                  theme="light"
+                  (resolved)="onTurnstileResolved($event)">
+              </ngx-turnstile>
+          </div>
           <button (click)="solicitarCodigo()" class="btn btn-primary w-100 mt-3">
             Enviar Código
           </button>
@@ -143,7 +149,8 @@
         <button type="button"
           class="btn btn-secondary w-100 mt-2"
           data-bs-dismiss="modal"
-          (click)="resetFormulario()"> Cancelar / Cerrar
+          id="btnCloseRegistro"
+          (click)="resetFormulario()"> Cerrar
         </button>
 
         <h6 class="mt-3 text-center text-danger">{{ mensaje }}</h6>
@@ -170,7 +177,12 @@
         <h5 class="text-center mb-3" style="color: #1E88E5;">Ingresa tu correo y contraseña</h5>
         <p class="fw-bold">Ingresa tu Correo Universitario:</p>
           <input [(ngModel)]="datos.correo" type="email" class="form-control" placeholder="al000000@edu.uaa.mx">
-          
+          <div class="mb-3 d-flex justify-content-center">
+              <ngx-turnstile 
+                  [siteKey]="siteKey" 
+                  (resolved)="onTurnstileResolved($event)">
+              </ngx-turnstile>
+          </div>
           <button (click)="solicitarCodigo()" class="btn btn-primary w-100 mt-3">
             Enviar Código
           </button>

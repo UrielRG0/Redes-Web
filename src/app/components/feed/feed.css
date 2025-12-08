@@ -1,61 +1,68 @@
-
-.main-container {
-    width: 100vw;
-      overflow-x: hidden;
-    min-height: 100vh;
-    background-color: #1c1e21!important;
-}
-
-/* Hace que las barras laterales se queden fijas al hacer scroll */
-.sidebar-sticky {
+/* Contenedor de las pestañas */
+.feed-tabs {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    
+    /* 1. AJUSTE DE POSICIÓN STICKY */
     position: sticky;
-    top: 90px;
-    height: calc(100vh - 90px);
-    overflow-y: auto;
-    padding-bottom: 20px;
-    max-height: calc(100vh - 100px);
-}
-/* Ocultar barra de scroll de los lados */
-.sidebar-sticky::-webkit-scrollbar { width: 0px;  }
+    /* Si tu navbar mide 80px, esto debe ser aprox 70px u 80px.
 
-
-/* Estilos de las tarjetas laterales */
-.side-card {
-    background-color: #242526;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 15px;
-    color: white;
-    border: 1px solid #3e4042;
+    z-index: 100;
+    
+    /* 2. ESTÉTICA PARA QUE NO PAREZCA "ISLA" */
+    background-color: #18191a; /* Mismo color de fondo de tu app (o usa rgba(24, 25, 26, 0.95)) */
+    border-bottom: 1px solid #3e4042;
+    
+    /* 3. QUITAR MÁRGENES Y BORDES REDONDOS */
+    margin-top: 0;      /* Elimina espacio arriba */
+    margin-bottom: 0;   /* Elimina espacio abajo (se pega a la barra de eventos) */
+    border-radius: 0;   /* Cuadrado, para que parezca una barra de herramientas */
+    
+    /* Opcional: Si sientes que flota mucho a los lados, usa márgenes negativos para compensar el padding de Bootstrap */
+    margin-left: -12px;
+    width: calc(100% + 24px); 
+    margin-bottom: 1rem;
 }
 
-/* Avatar lateral */
-.side-avatar {
-    width: 60px; height: 60px;
-    border-radius: 50%;
-    border: 3px solid #242526;
-    margin-top: -30px;
-}
-.card-bg {
-    height: 60px;
-    background: linear-gradient(to right, #9d4977, #ffc107);
-}
-.user-content { text-align: center; padding-bottom: 15px; }
-
-/* Menú */
-.menu-item {
-    display: block;
-    padding: 10px 15px;
-    color: #e4e6eb;
-    text-decoration: none;
-    border-radius: 8px;
-    margin-bottom: 5px;
-    transition: 0.2s;
+/* Cada botón individual */
+.tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    position: relative;
+    
+    /* Texto */
+    color: #b0b3b8;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.2s;
 }
-.menu-item:hover { background-color: #3a3b3c; }
-.menu-item .icon { margin-right: 10px; }
 
-/* Links */
-.uaa-link { color: #b0b3b8; text-decoration: none; display: block; padding: 3px 0; }
-.uaa-link:hover { color: #ffc107; text-decoration: underline; }
+.tab-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Estado Activo */
+.tab-item.active {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.02); /* Fondo sutil para el activo */
+}
+
+/* Línea morada */
+.active-line {
+    position: absolute;
+    bottom: 0;
+    width: 100%; /* Que ocupe todo el ancho del botón, no solo una rayita en medio */
+    height: 3px;
+    background-color: #9d4977; 
+    animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}

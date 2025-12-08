@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './event-bar.css',
 })
 export class EventBar implements OnInit {
-  
+  eventoSeleccionado: EventoInterface | null = null;
   eventos: EventoInterface[] = [];
   private API_EVENTO_IMG = 'https://172.25.124.29:8443/socialNetUAA/api/eventos/imagenes'; 
 
@@ -62,5 +62,22 @@ export class EventBar implements OnInit {
 
   verDetalleEvento(id: number) {
     console.log("Ir al evento", id);
+  }
+  // 1. Abrir: Recibe el objeto entero, no solo el ID
+  abrirModal(evento: EventoInterface) {
+    this.eventoSeleccionado = evento;
+    // Opcional: Bloquear el scroll de la página de fondo
+    document.body.style.overflow = 'hidden'; 
+  }
+
+  // 2. Cerrar
+  cerrarModal() {
+    this.eventoSeleccionado = null;
+    document.body.style.overflow = 'auto'; // Reactivar scroll
+  }
+
+  // 3. Evitar que el clic dentro de la tarjeta cierre el modal
+  detenerPropagacion(event: Event) {
+    event.stopPropagation();
   }
 }

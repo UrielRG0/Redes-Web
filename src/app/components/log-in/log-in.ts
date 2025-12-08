@@ -5,18 +5,20 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { jwtDecode } from "jwt-decode";
 import { Catalogo } from '../../service/catalogos';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 declare const google: any;
 
 @Component({
   selector: 'app-log-in',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,RecaptchaModule],
   templateUrl: './log-in.html',
   styleUrl: './log-in.css',
 })
 export class LogIn implements OnInit {
-
+  siteKey = '6Le1fiQsAAAAAOre6VQLRMqhdcR99EnGDcjZEuDg'; 
+  captchaToken: string | null = null;
   // --- VARIABLES PARA EL FLUJO DE 3 PASOS ---
   paso: number = 1;
   codigoVerificacion: string = '';
@@ -46,7 +48,10 @@ export class LogIn implements OnInit {
       { theme: 'filled_black', size: 'large', shape: 'pill' }
     );
   }
-
+  resolved(token: string | null) {
+      console.log('Captcha resuelto:', token);
+      this.captchaToken = token;
+  }
   onFotoSeleccionada(event: any) {
     this.foto = event.target.files[0];
   }
@@ -56,7 +61,10 @@ export class LogIn implements OnInit {
   solicitarCodigo() {
     // Limpiamos espacios y convertimos a minúsculas para validar
     const correoLimpio = this.datos.correo.trim().toLowerCase();
-
+    if (!this.captchaToken) {
+          alert("Por favor confirma que no eres un robot.");
+          return;
+      }
     if (!correoLimpio) {
       alert("Por favor escribe tu correo universitario");
       return;
@@ -72,7 +80,7 @@ export class LogIn implements OnInit {
     this.mensaje = 'Enviando código...';
     
     // Usamos la variable limpia
-    this.usuarioService.iniciarRegistro(this.datos.correo).subscribe({
+    this.usuarioService.iniciarRegistro(this.datos.correo, this.captchaToken).subscribe({
         next: (res) => {
           this.mensaje = ''; 
           this.paso = 2; 
@@ -141,19 +149,31 @@ cargarInteresesDelSistema() {
     formData.append('nombre', this.datos.nombre);
     formData.append('correo', this.datos.correo);
     formData.append('password', this.datos.password);
-    // Solo agregar la foto si existe
+    
     this.interesesSeleccionados.forEach(id => {
         formData.append('intereses', id.toString());
     });
+    
     if (this.foto) {
       formData.append('foto', this.foto);
     }
+
     this.usuarioService.registroFinal(formData).subscribe({
       next: (resp) => {
         this.mensaje = '¡Registro Exitoso!';
         console.log('Respuesta Java:', resp);
         
+        // --- 1. CERRAR EL MODAL AUTOMÁTICAMENTE ---
+        const btnClose = document.getElementById('btnCloseRegistro');
+        if (btnClose) {
+            btnClose.click(); // Simula el clic para que Bootstrap cierre el modal
+        }
+        // ------------------------------------------
+
         this.resetFormulario();
+        
+        // Opcional: Mostrar alerta o abrir login
+        alert("Tu cuenta ha sido creada. Por favor inicia sesión.");
       },
       error: (err) => {
         this.mensaje = 'Error al guardar: ' + err.message;

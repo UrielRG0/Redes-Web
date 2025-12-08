@@ -32,7 +32,9 @@
     "bootstrap": "^5.3.8",
     "google-one-tap": "^1.0.6",
     "jwt-decode": "^4.0.0",
+    "ng-recaptcha": "^13.2.1",
     "ngx-infinite-scroll": "^20.0.0",
+    "ngx-turnstile": "^0.2.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
