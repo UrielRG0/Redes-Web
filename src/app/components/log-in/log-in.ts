@@ -5,21 +5,26 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { jwtDecode } from "jwt-decode";
 import { Catalogo } from '../../service/catalogos';
-import { RecaptchaModule } from 'ng-recaptcha';
 
 declare const google: any;
-
+declare global {
+  interface Window {
+    onHCaptchaResolved: (token: string) => void;
+  }
+}
 @Component({
   selector: 'app-log-in',
   standalone: true,
-  imports: [CommonModule, FormsModule,RecaptchaModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './log-in.html',
   styleUrl: './log-in.css',
 })
+
 export class LogIn implements OnInit {
-  siteKey = '6Le1fiQsAAAAAOre6VQLRMqhdcR99EnGDcjZEuDg'; 
+ 
   captchaToken: string | null = null;
   // --- VARIABLES PARA EL FLUJO DE 3 PASOS ---
+  
   paso: number = 1;
   codigoVerificacion: string = '';
   listaIntereses: any[] = []; 
@@ -37,7 +42,10 @@ export class LogIn implements OnInit {
   constructor(private usuarioService: Usuario, private router: Router, private catalogoService: Catalogo) {}
 
   ngOnInit(): void {
-    // ... Tu lógica de Google se queda igual ...
+     window.onHCaptchaResolved = (token: string) => {
+        console.log("hCaptcha token:", token);
+        this.captchaToken = token;
+      };
     google.accounts.id.initialize({
       client_id: '153169391588-786ejor6s4bch4jdloqrtnffki8kts9m.apps.googleusercontent.com',
       callback: (response: any) => this.handleCredentialResponse(response),
@@ -48,10 +56,6 @@ export class LogIn implements OnInit {
       { theme: 'filled_black', size: 'large', shape: 'pill' }
     );
   }
-  resolved(token: string | null) {
-      console.log('Captcha resuelto:', token);
-      this.captchaToken = token;
-  }
   onFotoSeleccionada(event: any) {
     this.foto = event.target.files[0];
   }
@@ -59,7 +63,7 @@ export class LogIn implements OnInit {
   // --- PASO 1: Enviar correo para pedir código ---
 // En tu archivo log-in.ts, busca la función solicitarCodigo()
   solicitarCodigo() {
-    // Limpiamos espacios y convertimos a minúsculas para validar
+    // Limpiamos espacios y convertimos a minúsculas para validar'
     const correoLimpio = this.datos.correo.trim().toLowerCase();
     if (!this.captchaToken) {
           alert("Por favor confirma que no eres un robot.");

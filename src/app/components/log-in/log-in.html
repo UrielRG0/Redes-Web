@@ -95,13 +95,17 @@
         <div *ngIf="paso === 1">
           <p class="fw-bold">Ingresa tu Correo Universitario:</p>
           <input [(ngModel)]="datos.correo" type="email" class="form-control" placeholder="al000000@edu.uaa.mx">
-          <div class="d-flex justify-content-center my-3">
-              <ngx-turnstile 
-                  [siteKey]="siteKey" 
-                  theme="light"
-                  (resolved)="onTurnstileResolved($event)">
-              </ngx-turnstile>
-          </div>
+             <div class="d-flex justify-content-center my-3">
+             <div 
+              class="h-captcha" 
+              data-sitekey="6f6aa020-8a12-426a-8e1a-2e743a5c1730"
+              data-callback="onHCaptchaResolved">
+            </div>
+
+            <!-- Input oculto donde guardamos el token -->
+            <input type="hidden" id="hcaptchaToken">
+
+            </div>
           <button (click)="solicitarCodigo()" class="btn btn-primary w-100 mt-3">
             Enviar Código
           </button>
@@ -178,10 +182,6 @@
         <p class="fw-bold">Ingresa tu Correo Universitario:</p>
           <input [(ngModel)]="datos.correo" type="email" class="form-control" placeholder="al000000@edu.uaa.mx">
           <div class="mb-3 d-flex justify-content-center">
-              <ngx-turnstile 
-                  [siteKey]="siteKey" 
-                  (resolved)="onTurnstileResolved($event)">
-              </ngx-turnstile>
           </div>
           <button (click)="solicitarCodigo()" class="btn btn-primary w-100 mt-3">
             Enviar Código

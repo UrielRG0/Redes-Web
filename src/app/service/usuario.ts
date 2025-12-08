@@ -15,13 +15,22 @@ export class Usuario {
     const body = new URLSearchParams();
     body.set('correo', correo);
    if (token) {
-        body.set('captchaToken', token); 
+        body.set('captchaToken', token); // 'captchaToken' debe coincidir con el @FormParam de Java
     }
-    return this.http.post(`${this.baseUrl}/iniciar-registro`, body.toString(), {
-      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
-      responseType: 'text' // <--- AGREGA ESTA LÍNEA
+
+    const headers = new HttpHeaders({ 
+        'Content-Type': 'application/x-www-form-urlencoded' 
     });
-  }
+
+    return this.http.post(
+        `${this.baseUrl}/iniciar-registro`, 
+        body.toString(), 
+        { 
+            headers: headers,
+            responseType: 'text' as 'json' // Truco para que TypeScript no se queje
+        }
+    );
+}
 
   verificarCodigo(correo: string, codigo: string) {
     const body = new URLSearchParams();
