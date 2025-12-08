@@ -29,14 +29,29 @@ export class LogIn implements OnInit {
   codigoVerificacion: string = '';
   listaIntereses: any[] = []; 
   interesesSeleccionados: number[] = [];
-  datos = { 
-    nombre: '', 
-    correo: '', 
-    password: '', 
-    rol: 'alumno', 
-    isAdmin: false, 
-    idUsuario: 0  
-  };
+  listaCarreras: any[] = [];
+  listaDepartamentos: any[] = [];
+
+  // Actualizamos el objeto datos para incluir las selecciones
+  datos: {
+  nombre: string;
+  correo: string;
+  password: string;
+  rol: string;
+  isAdmin: boolean;
+  idUsuario: number;
+  idCarrera: number | null;
+  idDepartamento: number | null;
+} = {
+  nombre: '',
+  correo: '',
+  password: '',
+  rol: '',
+  isAdmin: false,
+  idUsuario: 0,
+  idCarrera: null,
+  idDepartamento: null
+};
   foto: File | null = null;
   mensaje = '';
   constructor(private usuarioService: Usuario, private router: Router, private catalogoService: Catalogo) {}
@@ -46,6 +61,20 @@ export class LogIn implements OnInit {
         console.log("hCaptcha token:", token);
         this.captchaToken = token;
       };
+      const modal = document.getElementById('registroModal');
+
+    modal?.addEventListener('shown.bs.modal', () => {
+      if ((window as any).hcaptcha) {
+        (window as any).hcaptcha.render('hcaptcha-container', {
+          sitekey: '6f6aa020-8a12-426a-8e1a-2e743a5c1730',
+          callback: (token: string) => {
+            console.log('hCaptcha token:', token);
+            this.captchaToken = token;
+          }
+        });
+      }
+    });
+
     google.accounts.id.initialize({
       client_id: '153169391588-786ejor6s4bch4jdloqrtnffki8kts9m.apps.googleusercontent.com',
       callback: (response: any) => this.handleCredentialResponse(response),
@@ -105,21 +134,59 @@ export class LogIn implements OnInit {
       });
   }
 
-
-  // --- PASO 2: Validar el código ingresado ---
-  validarCodigo() {
-    if (!this.codigoVerificacion) { /* ... */ return; }
+validarCodigo() {
+    if (!this.codigoVerificacion) { return; }
     
     this.usuarioService.verificarCodigo(this.datos.correo, this.codigoVerificacion).subscribe({
       next: (res) => {
         this.mensaje = '';
+        
+        // 1. DETERMINAR ROL AUTOMÁTICAMENTE
+        this.determinarRolYTraerDatos();
+
         this.paso = 3; 
         
-        // --- NUEVO: CARGAR INTERESES AL LLEGAR AL PASO 3 ---
+        // Cargar intereses (ya lo tenías)
         this.cargarInteresesDelSistema();
-        // ---------------------------------------------------
       },
-      error: (err) => { /* ... */ }
+      error: (err) => { 
+        this.mensaje = 'Código incorrecto';
+      }
+    });
+  }
+  determinarRolYTraerDatos() {
+    const correo = this.datos.correo.toLowerCase().trim();
+
+    // Lógica solicitada:
+    // Si empieza con "al" Y termina en "@edu.uaa.mx" -> Alumno
+    if (correo.startsWith('al') && correo.endsWith('@edu.uaa.mx')) {
+        this.datos.rol = 'alumno';
+        this.cargarCarreras();
+    } 
+    // Si NO empieza con "al" pero es "@edu.uaa.mx" -> Profesor
+    else if (correo.endsWith('@edu.uaa.mx')) {
+        this.datos.rol = 'profesor';
+        this.cargarDepartamentos();
+    } 
+    else {
+        // Caso de error o correo externo (si permitieras externos)
+        this.datos.rol = 'invitado'; 
+    }
+
+    console.log("Rol detectado:", this.datos.rol);
+  }
+
+  cargarCarreras() {
+    this.catalogoService.obtenerCarreras().subscribe({
+        next: (data) => this.listaCarreras = data,
+        error: (e) => console.error("Error carreras", e)
+    });
+  }
+
+  cargarDepartamentos() {
+    this.catalogoService.obtenerDepartamentos().subscribe({
+        next: (data) => this.listaDepartamentos = data,
+        error: (e) => console.error("Error departamentos", e)
     });
   }
 cargarInteresesDelSistema() {
@@ -144,7 +211,18 @@ cargarInteresesDelSistema() {
   // --- PASO 3: Enviar todos los datos (nombre, pass, foto) ---
   enviarRegistroFinal() {
     if (!this.datos.nombre || !this.datos.password) {
+      alert("Llena nombre y contraseña");
       return;
+    }
+
+    // Validación extra: Que hayan seleccionado su carrera/depto
+    if (this.datos.rol === 'alumno' && !this.datos.idCarrera) {
+        alert("Por favor selecciona tu Carrera.");
+        return;
+    }
+    if (this.datos.rol === 'profesor' && !this.datos.idDepartamento) {
+        alert("Por favor selecciona tu Departamento.");
+        return;
     }
 
     this.mensaje = 'Guardando datos...';
@@ -152,7 +230,16 @@ cargarInteresesDelSistema() {
     formData.append('nombre', this.datos.nombre);
     formData.append('correo', this.datos.correo);
     formData.append('password', this.datos.password);
-    
+    formData.append('rol', this.datos.rol); // Enviamos el rol calculado
+
+    // Agregamos el ID correspondiente
+    if (this.datos.rol === 'alumno' && this.datos.idCarrera) {
+        formData.append('idCarrera', this.datos.idCarrera.toString());
+    } else if (this.datos.rol === 'profesor' && this.datos.idDepartamento) {
+        formData.append('idDepartamento', this.datos.idDepartamento.toString());
+    }
+
+    // Intereses
     this.interesesSeleccionados.forEach(id => {
         formData.append('intereses', id.toString());
     });
@@ -226,7 +313,7 @@ iniciarSesion() {
   });
 }
   resetFormulario() {
-    this.datos = { nombre: '', correo: '', password: '' ,rol:'invitado',isAdmin:false, idUsuario:0};
+    this.datos = { nombre: '', correo: '', password: '' ,rol:'invitado',isAdmin:false, idUsuario:0,idCarrera:null,idDepartamento:null};
     this.foto = null;
     this.codigoVerificacion = '';
     this.interesesSeleccionados = []; // <--- LIMPIAR SELECCIÓN

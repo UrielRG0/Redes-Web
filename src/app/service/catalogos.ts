@@ -2,13 +2,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class Catalogo {
+  // Ajusta tu URL base si es necesario
   private API_URL = 'https://172.25.124.29:8443/socialNetUAA/api/catalogos';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   obtenerIntereses(): Observable<any[]> {
     return this.http.get<any[]>(`${this.API_URL}/intereses`);
+  }
+  
+  // --- NUEVOS MÉTODOS ---
+  obtenerCarreras(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API_URL}/carreras`);
+  }
+
+  obtenerDepartamentos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API_URL}/departamentos`);
   }
 }
