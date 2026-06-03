@@ -21,8 +21,6 @@ declare global {
 })
 
 export class LogIn implements OnInit {
- 
-  captchaToken: string | null = null;
   // --- VARIABLES PARA EL FLUJO DE 3 PASOS ---
   
   paso: number = 1;
@@ -91,47 +89,52 @@ export class LogIn implements OnInit {
 
   // --- PASO 1: Enviar correo para pedir código ---
 // En tu archivo log-in.ts, busca la función solicitarCodigo()
+  captchaToken: string = ''; // Crea esta variable para almacenar el token
+
+  // Asegúrate de que el evento de tu Captcha en el HTML asigne el valor a esta variable
+  onCaptchaResolved(token: string) {
+    console.log("hCaptcha token: ", token);
+    this.captchaToken = token;
+  }
+
   solicitarCodigo() {
-    // Limpiamos espacios y convertimos a minúsculas para validar'
     const correoLimpio = this.datos.correo.trim().toLowerCase();
-    if (!this.captchaToken) {
-          alert("Por favor confirma que no eres un robot.");
-          return;
-      }
+
     if (!correoLimpio) {
       alert("Por favor escribe tu correo universitario");
       return;
     }
 
-    
     if (!correoLimpio.endsWith('@edu.uaa.mx')) {
       this.mensaje = 'Error: Solo se permiten correos institucionales (@edu.uaa.mx)';
-      return; // Detenemos la función aquí
+      return; 
     }
-    // ------------------------------
+
+    // Validamos que el usuario haya resuelto el Captcha
+    if (!this.captchaToken) {
+      this.mensaje = 'Error: Por favor resuelve el Captcha.';
+      return;
+    }
 
     this.mensaje = 'Enviando código...';
     
-    // Usamos la variable limpia
-    this.usuarioService.iniciarRegistro(this.datos.correo, this.captchaToken).subscribe({
+    // Le pasamos el correo y el token al servicio
+    this.usuarioService.iniciarRegistro(correoLimpio, this.captchaToken).subscribe({
         next: (res) => {
           this.mensaje = ''; 
           this.paso = 2; 
         },
         error: (err) => {
-          console.log(err); // Muestra el error completo en la consola F12
-
-          // --- CORRECCIÓN PARA EL ERROR [object Object] ---
+          console.log(err);
           if (err.error && typeof err.error === 'object') {
-            // Si el servidor manda un objeto JSON, intentamos leer sus propiedades comunes
-            // Ajusta 'message' o 'error' según lo que veas en el paso 1
             this.mensaje = 'Error: ' + (err.error.message || err.error.error || JSON.stringify(err.error));
           } else {
-            // Si es texto plano
             this.mensaje = 'Error: ' + (err.error || err.message);
           }
+          // Es buena idea limpiar el token si falla para obligar a resolverlo de nuevo
+          this.captchaToken = ''; 
         }
-      });
+    });
   }
 
 validarCodigo() {
@@ -231,6 +234,7 @@ cargarInteresesDelSistema() {
     formData.append('correo', this.datos.correo);
     formData.append('password', this.datos.password);
     formData.append('rol', this.datos.rol); // Enviamos el rol calculado
+    formData.append('idCarrera', this.datos.idCarrera!.toString());
 
     // Agregamos el ID correspondiente
     if (this.datos.rol === 'alumno' && this.datos.idCarrera) {

@@ -11,26 +11,19 @@ export class Usuario {
   constructor(private http: HttpClient) { }
 
 
-  iniciarRegistro(correo: string,token:string) {
+  // Agregamos el parámetro captchaToken
+  iniciarRegistro(correo: string, captchaToken: string) {
     const body = new URLSearchParams();
     body.set('correo', correo);
-   if (token) {
-        body.set('captchaToken', token); // 'captchaToken' debe coincidir con el @FormParam de Java
-    }
-
-    const headers = new HttpHeaders({ 
-        'Content-Type': 'application/x-www-form-urlencoded' 
+    
+    // CAMBIA 'token' POR EL NOMBRE EXACTO QUE PIDE JAVA (ej. 'captcha' o 'h-captcha-response')
+    body.set('captcha', captchaToken); 
+    
+    return this.http.post(`${this.baseUrl}/iniciar-registro`, body.toString(), {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
+      responseType: 'text' 
     });
-
-    return this.http.post(
-        `${this.baseUrl}/iniciar-registro`, 
-        body.toString(), 
-        { 
-            headers: headers,
-            responseType: 'text' as 'json' // Truco para que TypeScript no se queje
-        }
-    );
-}
+  }
 
   verificarCodigo(correo: string, codigo: string) {
     const body = new URLSearchParams();
