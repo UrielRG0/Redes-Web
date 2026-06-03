@@ -227,6 +227,7 @@ export class PostCard implements OnInit {
             
             this.listaComentarios.push(comentarioVisual);
             this.nuevoComentarioTexto = ''; // Limpiar input
+            this.cargarComentarios();
         },
         error: (e) => {
             console.error("Error al comentar:", e);
