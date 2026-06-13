@@ -12,8 +12,19 @@ import { CommonModule } from '@angular/common';
   styleUrl: './event-bar.css',
 })
 export class EventBar implements OnInit {
+  eventosActivos: EventoInterface[] = [];
+  eventosPasados: EventoInterface[] = [];
+  
+  // Agrega esta variable para el botón
+  mostrarArchivo: boolean = false; 
+
   eventoSeleccionado: EventoInterface | null = null;
-  eventos: EventoInterface[] = [];
+  // ... resto de tus variables ...
+
+  // Agrega este método para el botón
+  toggleArchivo() {
+    this.mostrarArchivo = !this.mostrarArchivo;
+  }
   private API_EVENTO_IMG = 'https://172.25.124.29:8443/socialNetUAA/api/eventos/imagenes'; 
 
   constructor(private eventoService: EventoService, private sanitizer: DomSanitizer) {}
@@ -21,14 +32,17 @@ export class EventBar implements OnInit {
   ngOnInit() {
     this.cargarEventos();
   }
+
+  // 3. Cargamos ambos fragmentos desde el servicio
   cargarEventos() {
-    this.eventoService.obtenerTodos().subscribe({
-      next: (data) => {
-        this.eventos = data.reverse(); 
-        // TIP: Imprime en consola para verificar que el array 'imagenes' venga lleno
-        console.log('Eventos cargados:', this.eventos);
-      },
-      error: (e) => console.error(e)
+    this.eventoService.obtenerEventosActivos().subscribe({
+      next: (data) => this.eventosActivos = data.reverse(),
+      error: (e) => console.error("Error eventos activos", e)
+    });
+
+    this.eventoService.obtenerEventosPasados().subscribe({
+      next: (data) => this.eventosPasados = data.reverse(),
+      error: (e) => console.error("Error eventos pasados", e)
     });
   }
 
@@ -38,7 +52,7 @@ export class EventBar implements OnInit {
     
     // 1. Validación: Si el array es nulo o está vacío
     if (!imagenes || imagenes.length === 0) {
-        return 'assets/event-placeholder.jpg'; // Imagen por defecto
+        return 'event-placeholder.jpg'; // Imagen por defecto
     }
 
     // 2. Tomamos la PRIMERA imagen como portada
@@ -58,10 +72,6 @@ export class EventBar implements OnInit {
       // Pasamos el array a la función de arriba
       const url = this.getImagenUrl(imagenes);
       return this.sanitizer.bypassSecurityTrustStyle(`url('${url}')`);
-  }
-
-  verDetalleEvento(id: number) {
-    console.log("Ir al evento", id);
   }
   // 1. Abrir: Recibe el objeto entero, no solo el ID
   abrirModal(evento: EventoInterface) {

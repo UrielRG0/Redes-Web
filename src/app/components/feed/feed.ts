@@ -44,19 +44,25 @@ export class Feed implements OnInit {
 
 
   ngOnInit() {
+    // --- LIMPIADOR DE SOMBRAS DE BOOTSTRAP ---
+    document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty('padding-right');
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    // -----------------------------------------
+
     const usuarioLogueado = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-   if (usuarioLogueado && usuarioLogueado.intereses && usuarioLogueado.intereses.length > 0) {
-        this.misIntereses = usuarioLogueado.intereses;
+    if (usuarioLogueado && usuarioLogueado.intereses && usuarioLogueado.intereses.length > 0) {
+         this.misIntereses = usuarioLogueado.intereses;
     }
 
     // 2. Por defecto, aplicamos el filtro de "Mis Intereses"
     this.cambiarVista('intereses');
     this.cargarFeed();
-    // 1. Nos suscribimos al Buscador del Navbar
+    
     this.busquedaService.terminoBusqueda$.subscribe(termino => {
         this.terminoBusqueda = termino;
-        // Cada vez que escriban algo, recargamos el feed desde cero
-        this.cargarFeed();
+        this.cargarFeed(); // Esto reiniciará la página a 1 y llamará a loadMorePosts()
     });
   }
   cambiarVista(tipo: 'intereses' | 'todos') {
@@ -84,7 +90,7 @@ export class Feed implements OnInit {
     this.isLoading = true;
     
     // 2. ENVIAMOS TODOS LOS FILTROS AL SERVICIO (Evento, Intereses y Búsqueda)
-    this.pubService.obtenerPublicaciones(
+  this.pubService.obtenerPublicaciones(
         this.filtroEvento, 
         this.filtrosIntereses,
         this.idUsuario,

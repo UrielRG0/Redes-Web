@@ -6,7 +6,8 @@ import { EventoService } from '../../service/evento'; // <--- IMPORTAR
 import { Catalogo } from '../../service/catalogos';
 import { Comentario } from '../../service/comentario';
 import { FormsModule } from '@angular/forms';
-
+import { UsuarioPerfil } from '../../models/usuarioPerfil';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-post-card',
   standalone: true,
@@ -16,12 +17,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class PostCard implements OnInit { 
   @Input() post!: PublicacionInterface; 
+  autor?: UsuarioPerfil;
   comentariosEstructurados: any[] = []; // Aquí guardaremos Padres con sus Hijos
   idComentarioEnRespuesta: number | null = null; // Para saber qué caja de respuesta abrir
   textoRespuesta: string = '';
   // Variables para mostrar en el HTML
   nombreAutor: string = 'Cargando...';
-  avatarUrl: string = 'assets/person.png'; // Imagen por defecto
+  avatarUrl: string = 'person.png'; // Imagen por defecto
   nombreEvento: string | null = null;
   esEventoVerificado: boolean = false;
   nombresIntereses: string[] = [];
@@ -34,17 +36,21 @@ export class PostCard implements OnInit {
   private API_POST_IMGS = 'https://172.25.124.29:8443/socialNetUAA/api/publicaciones/imagenes';
   private API_USER_FOTOS = 'https://172.25.124.29:8443/socialNetUAA/api/usuarios/fotos';
 
-  constructor(private usuarioService: Usuario, private eventoService: EventoService, private catalogoService: Catalogo,private comentarioService: Comentario
+  constructor(private usuarioService: Usuario, private eventoService: EventoService, private catalogoService: Catalogo,private comentarioService: Comentario, private sanitizer: DomSanitizer
   ) {}
 
-  ngOnInit() {
-    // Al iniciar, buscamos quién es el autor
-    this.cargarDatosAutor();
+ ngOnInit() {
+    // CORRECCIÓN: Le pasamos el ID del autor que viene en el Post
+    if (this.post.idAutor) {
+        this.cargarDatosAutor(this.post.idAutor);
+    }
+    
     if (this.post.idEvento) {
         this.cargarDatosEvento(this.post.idEvento);
     }
+    
     this.usuarioLogueado = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-    // 2. Convertir IDs de intereses a Hashtags (Nombres)
+    
     if (this.post.intereses && this.post.intereses.length > 0) {
         this.cargarNombresIntereses();
     }
@@ -71,42 +77,51 @@ export class PostCard implements OnInit {
           error: (e) => console.error('Error cargando intereses', e)
       });
   }
-  cargarDatosAutor() {
-    if (!this.post.idAutor) return;
-
-    // Llamamos al endpoint GET /usuarios/buscar/{id}
-    this.usuarioService.obtenerDatosUsuario(this.post.idAutor).subscribe({
-      next: (usuario: any) => {
-        // 1. Asignamos el nombre real
-        this.nombreAutor = usuario.nombre;
-
-        // 2. Procesamos la foto (Google vs Local)
-        if (usuario.fotoRuta) {
-            this.construirUrlAvatar(usuario.fotoRuta);
-        }
+  cargarDatosAutor(idAutor: number) {
+    this.usuarioService.obtenerPerfilUsuario(idAutor).subscribe({
+      next: (perfil: UsuarioPerfil) => {
+        // Guardamos el objeto completo por si lo ocupas después
+        this.autor = perfil; 
+        
+        // Asignamos los datos a las variables que usa tu HTML
+        this.nombreAutor = perfil.nombre;
+        this.construirUrlAvatar(perfil.fotoRuta || '');
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error al cargar el perfil del autor', error);
         this.nombreAutor = 'Usuario Desconocido';
+        this.avatarUrl = '/person.png';
       }
     });
   }
-
   construirUrlAvatar(ruta: string) {
-      if (ruta.startsWith('http')) {
-          this.avatarUrl = ruta; // Es de Google
+      if (!ruta) {
+          this.avatarUrl = '/person.png';
+          return;
+      }
+
+      if (ruta.startsWith('data:image') || ruta.startsWith('http')) {
+          this.avatarUrl = ruta; 
       } else {
-          // Es local: limpiamos la ruta y concatenamos con la API
           const nombreLimpio = ruta.split('/').pop() || ruta;
           this.avatarUrl = `${this.API_USER_FOTOS}/${nombreLimpio}`;
       }
   }
 
-  // Helper para las imágenes del POST (ya lo tenías)
-  getPostImageUrl(ruta: string): string {
+ getPostImageUrl(ruta: string): SafeUrl | string {
       if (!ruta) return '';
-      if (ruta.startsWith('http')) return ruta;
-      const nombre = ruta.split('/').pop() || ruta;
-      return `${this.API_POST_IMGS}/${nombre}`;
+
+      // 1. Si es un enlace web (Unsplash, Google, etc.), devuélvelo directo
+      if (ruta.startsWith('http')) {
+          return ruta;
+      }
+      if (ruta.startsWith('data:image')) {
+          return this.sanitizer.bypassSecurityTrustUrl(ruta);
+      }
+
+      // 3. Si es una ruta de archivo local (ej: "assets/foto.jpg")
+      // Aquí agregamos el prefijo si es necesario o simplemente lo devolvemos
+      return ruta; 
   }
   toggleComentarios() {
     this.mostrarComentarios = !this.mostrarComentarios;
@@ -148,23 +163,20 @@ export class PostCard implements OnInit {
   }
 
   // --- NUEVA FUNCIÓN AUXILIAR PARA OBTENER FOTO Y NOMBRE ---
-  hidratarUsuario(comentario: any) {
-      // Valores por defecto mientras carga
+ hidratarUsuario(comentario: any) {
       comentario.nombreUsuario = 'Cargando...';
-      comentario.fotoUsuarioUrl = 'assets/person.png';
+      comentario.fotoUsuarioUrl = '/person.png'; 
 
-      // Llamada al servicio de usuarios usando el ID que viene en el comentario
-      this.usuarioService.obtenerDatosUsuario(comentario.idUsuario).subscribe({
-          next: (usuario: any) => {
-              // 1. Asignar Nombre
-              comentario.nombreUsuario = usuario.nombre;
+      // CORRECCIÓN: Usar obtenerPerfilUsuario en lugar de obtenerDatosUsuario
+      this.usuarioService.obtenerPerfilUsuario(comentario.idUsuario).subscribe({
+          next: (perfil: UsuarioPerfil) => {
+              comentario.nombreUsuario = perfil.nombre;
 
-              // 2. Asignar Foto
-              if (usuario.fotoRuta) {
-                  if (usuario.fotoRuta.startsWith('http')) {
-                      comentario.fotoUsuarioUrl = usuario.fotoRuta;
+              if (perfil.fotoRuta) {
+                  if (perfil.fotoRuta.startsWith('data:image') || perfil.fotoRuta.startsWith('http')) {
+                      comentario.fotoUsuarioUrl = perfil.fotoRuta;
                   } else {
-                      const nombre = usuario.fotoRuta.split('/').pop();
+                      const nombre = perfil.fotoRuta.split('/').pop();
                       comentario.fotoUsuarioUrl = `${this.API_USER_FOTOS}/${nombre}`;
                   }
               }

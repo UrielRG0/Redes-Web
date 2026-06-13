@@ -51,7 +51,7 @@
 
              <div class="comment-thread" *ngFor="let padre of comentariosEstructurados">
                  <div class="comment-item parent">
-                    <img [src]="padre.fotoUsuarioUrl || 'assets/person.png'" class="comment-avatar">
+                    <img [src]="padre.fotoUsuarioUrl || '/person.png'" class="comment-avatar">
                     <div class="comment-content">
                         <div class="comment-bubble">
                             <span class="comment-author">{{ padre.nombreUsuario }}</span>
@@ -66,7 +66,7 @@
 
                 <div class="replies-container" *ngIf="padre.respuestas && padre.respuestas.length > 0">
                     <div class="comment-item reply" *ngFor="let hijo of padre.respuestas">
-                        <img [src]="hijo.fotoUsuarioUrl || 'assets/person.png'" class="comment-avatar small">
+                        <img [src]="hijo.fotoUsuarioUrl || '/person.png'" class="comment-avatar small">
                         <div class="comment-content">
                             <div class="comment-bubble">
                                 <span class="comment-author">{{ hijo.nombreUsuario }}</span>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="reply-input-box" *ngIf="idComentarioEnRespuesta === padre.idComentario">
-                    <img [src]="avatarUrl || 'assets/person.png'" class="reply-avatar">
+                    <img [src]="avatarUrl || '/person.png'" class="reply-avatar">
                     <div class="input-wrapper small-input">
                         <input type="text" [(ngModel)]="textoRespuesta" 
                                placeholder="Respondiendo..." 
@@ -90,7 +90,7 @@
         </div>
 
         <div class="write-comment mt-3">
-             <img [src]="avatarUrl || 'assets/person.png'" class="write-avatar">
+             <img [src]="avatarUrl || '/person.png'" class="write-avatar">
              <div class="input-wrapper">
                  <input type="text" placeholder="Escribe un comentario..." 
                         [(ngModel)]="nuevoComentarioTexto"

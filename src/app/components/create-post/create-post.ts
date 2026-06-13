@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Usuario } from '../../service/usuario';
-
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Publicacion } from '../../service/publicacion'; // Ajusta si se llama Publicacion o PublicacionService
 import { Catalogo } from '../../service/catalogos';
 import { EventoService } from '../../service/evento';
@@ -20,16 +20,16 @@ export class CreatePost implements OnInit {
   @Output() eventoCreado = new EventEmitter<void>();
   @ViewChild('selectEvento') selectEvento!: ElementRef;
   usuario: any = {};
-  avatarUrl: string = 'assets/person.png';
+  avatarUrl: string = 'person.png';
   mostrarModalPost: boolean = false;
   mostrarModalEvento:boolean=false;
   isLoading: boolean = false;
-
+    previewImagen: SafeUrl | null = null; // Cambia el tipo
+    previewEvento: SafeUrl | null = null; // Cambia el tipo
   // Datos del Formulario
   tituloPublicacion:string='';
   textoPublicacion: string = '';
   archivoSeleccionado: File | null = null;
-  previewImagen: string | null = null;
   
   // Intereses
   listaIntereses: any[] = [];
@@ -37,7 +37,6 @@ export class CreatePost implements OnInit {
   listaEventos: any[] = [];
   idEventoSeleccionado: number | null = null;
   archivoEvento: File | null = null;
-  previewEvento: string | null = null;
   nuevoEvento = {
       titulo: '',
       descripcion: '',
@@ -54,7 +53,8 @@ export class CreatePost implements OnInit {
     private usuarioService: Usuario,
     private catalogoService: Catalogo,
     private pubService: Publicacion, // Tu servicio para crear posts
-    private eventoService: EventoService
+    private eventoService: EventoService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -71,15 +71,30 @@ export class CreatePost implements OnInit {
     });
   }
   cargarUsuario() {
-    this.usuario = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-    if (this.usuario && this.usuario.fotoRuta) {
-        // Lógica de avatar que ya usamos antes
-        if (this.usuario.fotoRuta.startsWith('http')) {
-            this.avatarUrl = this.usuario.fotoRuta;
-        } else {
-            const nombre = this.usuario.fotoRuta.split('/').pop();
-            this.avatarUrl = `${this.API_USER_FOTOS}/${nombre}`;
-        }
+    const sessionUser = JSON.parse(sessionStorage.getItem('usuario') || '{}');
+    
+    if (sessionUser && sessionUser.idUsuario) {
+        // Pedimos el perfil real al backend
+        this.usuarioService.obtenerPerfilUsuario(sessionUser.idUsuario).subscribe({
+            next: (perfilFresco) => {
+                this.usuario = perfilFresco; // Guardamos el usuario real
+                
+                if (this.usuario.fotoRuta) {
+                    if (this.usuario.fotoRuta.startsWith('data:image')) {
+                        // Sanitizamos base64
+                        this.avatarUrl = this.usuario.fotoRuta; 
+                    } else if (this.usuario.fotoRuta.startsWith('http')) {
+                        this.avatarUrl = this.usuario.fotoRuta;
+                    } else {
+                        const nombre = this.usuario.fotoRuta.split('/').pop();
+                        this.avatarUrl = `${this.API_USER_FOTOS}/${nombre}`;
+                    }
+                }
+            },
+            error: (err) => {
+                console.error("Error cargando perfil en CreatePost", err);
+            }
+        });
     }
   }
 
@@ -101,10 +116,13 @@ export class CreatePost implements OnInit {
     if (file) {
         this.archivoSeleccionado = file;
         const reader = new FileReader();
-        reader.onload = () => { this.previewImagen = reader.result as string; };
+        reader.onload = () => { 
+            // Sanitiza la URL antes de asignarla
+            this.previewImagen = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
+        };
         reader.readAsDataURL(file);
     }
-  }
+}
 
   toggleInteres(id: number) {
     if (this.interesesSeleccionados.includes(id)) {

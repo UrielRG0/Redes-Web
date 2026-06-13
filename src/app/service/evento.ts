@@ -27,5 +27,13 @@ export class EventoService {
   asistir(idEvento: number, idUsuario: number): Observable<any> {
     return this.http.post(`${this.API_URL}/asistir`, { idEvento, idUsuario });
   }
+  // En evento.service.ts
+    obtenerEventosActivos(): Observable<EventoInterface[]> {
+      return this.http.get<EventoInterface[]>(`${this.API_URL}/activos`);
+    }
+
+    obtenerEventosPasados(): Observable<EventoInterface[]> {
+      return this.http.get<EventoInterface[]>(`${this.API_URL}/pasados`);
+    }
 }
 

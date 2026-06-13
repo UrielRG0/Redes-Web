@@ -57,7 +57,9 @@ export class Usuario {
   obtenerDatosUsuario(dato: string | number): Observable<any> {
     return this.http.get(`${this.baseUrl}/buscar/${dato}`);
   }
-
+  obtenerPerfilUsuario(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${id}/perfil`);
+  }
   // --- NUEVOS MÉTODOS BASADOS EN TU POSTMAN (Carpeta Catalogo) ---
   obtenerCarreraPorId(id: number): Observable<any> {
     return this.http.get(`${this.catalogosUrl}/carreras/${id}`);

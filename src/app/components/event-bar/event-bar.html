@@ -1,22 +1,25 @@
 <div class="stories-wrapper">
-    <h5 class="section-title">Eventos Próximos</h5>
+    <div class="header-section">
+        <h5 class="section-title">Eventos Próximos</h5>
+    </div>
 
-    <div class="stories-container">
-        <div 
-            class="story-card" 
-            *ngFor="let evento of eventos"
-            (click)="abrirModal(evento)"
-            
-            [style.background-image]="obtenerEstiloBackground(evento.imagenes)">
-            
-            <div class="story-overlay">
-                 <div class="date-badge">
-                    {{ evento.fechaInicio | date:'d MMM' }}
-                </div>
-                <p class="story-title">{{ evento.titulo }}</p>
-            </div>
+    <div class="stories-container" *ngIf="!mostrarArchivo">
+        <div class="story-card" 
+             *ngFor="let evento of eventosActivos" 
+             (click)="abrirModal(evento)"
+             [style.background-image]="obtenerEstiloBackground(evento.imagenes)">
+             <div class="story-overlay"><p>{{ evento.titulo }}</p></div>
         </div>
+    </div>
 
+    <div class="archive-container" *ngIf="mostrarArchivo">
+        <h6 class="section-title">Eventos Pasados</h6>
+        <div class="story-card past" 
+             *ngFor="let evento of eventosPasados" 
+             (click)="abrirModal(evento)"
+             [style.background-image]="obtenerEstiloBackground(evento.imagenes)">
+             <div class="story-overlay"><p>{{ evento.titulo }}</p></div>
+        </div>
     </div>
 </div>
 <!-- MODAL EVENTO -->

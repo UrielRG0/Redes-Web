@@ -66,7 +66,7 @@
                         [(ngModel)]="idEventoSeleccionado" 
                         class="form-select custom-select">
                     <option [ngValue]="null" selected>Sin evento relacionado</option>
-                    <option *ngFor="let evento of listaEventos" [ngValue]="evento.id">
+                    <option *ngFor="let evento of listaEventos" [ngValue]="evento.idEvento">
                         {{ evento.titulo }}
                     </option>
                 </select>
